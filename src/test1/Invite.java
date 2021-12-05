@@ -5,4 +5,5 @@ abstract class Invite {
     String prenom;
     String numeroTel;
     String mail;
+
 }
