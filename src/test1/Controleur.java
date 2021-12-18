@@ -7,7 +7,8 @@ public class Controleur {
     private Gala gala;
     private String identifiantUtilisateur;
     private String typeParticipant; // sera utiliser pour choisir quel méthode utiliser avec if (typeParticipant = "etudiant")...
-
+    private String nomUtilisateur;
+    private int numeroUtilisateur;
 
     public Controleur(LocalDate dateDuGala){
         // TODO mettre en place le systeme de sauvegarde et de chargement avec un try catch / scanner(new File ())
@@ -16,7 +17,7 @@ public class Controleur {
         gala = new Gala();
         ctlIdentification(); // pour remplir les attributs identifiantUtilisateur et typeParticipant, et obligé l'utilisateur à s'identifier
         if (LocalDate.now().isAfter(dateDuGala.minusMonths(1))){
-            ctlMiseAJourReservationAttente();
+            ctlMiseAJourReservationAttente(); // après un mois fait avancer la file d'attente en fonction de la place et des désinscription
         }
     }
 
@@ -29,7 +30,21 @@ public class Controleur {
      * Utilisation d'un try cath pour redemander si l'identification est fausse
      */
     public void ctlIdentification (){
+        while (true) {
+            String typeParticipantTemporaire = ihm.identificationType();
+            String nomUtilisateurTemporaire = ihm.identificationNom();
+            int numUtilisateurTemporaire = ihm.identificationNum();
 
+            if (gala.checkIdentification(typeParticipantTemporaire, nomUtilisateurTemporaire, numUtilisateurTemporaire)) {
+                typeParticipant = typeParticipantTemporaire;
+                nomUtilisateur = nomUtilisateurTemporaire;
+                numeroUtilisateur = numUtilisateurTemporaire;
+                ihm.message("Votre identification est validé");
+                break;
+            } else {
+                ihm.message("Vous êtes introuvable dans notre base de données, l'identification à échouer, veuillez recommencer");
+            }
+        }
     }
 
 
@@ -40,7 +55,7 @@ public class Controleur {
      * @return vrai si le participant est inscrit sinon false
      */
     public boolean ctlUtilisateurInscrit(){
-
+        return gala.checkInscrit(typeParticipant,nomUtilisateur,numeroUtilisateur);
     }
 
     /**

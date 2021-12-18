@@ -3,9 +3,18 @@ package test1;
 import java.io.Serializable;
 
 abstract class Participant implements Serializable {
-    private String nom;
-    private String prenom;
-    private String numeroTel;
-    private String mail;
+    protected String nom;
+    protected String prenom;
+    protected String numeroTel;
+    protected String mail;
 
+    public Participant(String prenom, String nom, String numeroTel, String mail){
+        this.prenom = prenom;
+        this.nom = nom;
+        this.numeroTel = numeroTel;
+        this.mail = mail;
+    }
+
+    public Participant(){ // Pour pouvoir appeler des sous classe sans tout déclarer
+    }
 }
