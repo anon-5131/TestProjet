@@ -1,11 +1,12 @@
 package test1;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Reservation {
-    LocalDate date;
-    int numero;
-    int nbDePlace;
-    double montant;
-    Invite possesseur;
+public class Reservation implements Serializable {
+    private LocalDate date;
+    private int numero;
+    private int nbDePlace;
+    private double montant;
+    private Participant possesseur;
 }
