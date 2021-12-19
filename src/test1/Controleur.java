@@ -112,6 +112,7 @@ public class Controleur {
      * Si l'utilisateur à déjà une reservation, affiche le nombre de place et
      * le numero de table
      *
+     * Sinon
      * - Affiche le nombre de place max qui peut reserver (2)
      * - Demande s'il souhaite consulter le plan des tables Personnel(méthode de ihm)
      *
@@ -159,7 +160,96 @@ public class Controleur {
      *
      */
     public void ctlgestionPlace(){
+        if ("personnel".equals(typeParticipant)){
+            if ("reservation".equals(gala.retrouverReservation("personnel",numeroUtilisateur))){
+                Reservation reservation=gala.getReservationLesReservation(numeroUtilisateur);
+                ihm.message("Vous avez reserver "+reservation.getNbDePlace()+" place(s)\nVous êtes inscrit à la table numéro "+reservation.getNumero()+".");
+            // Si l'utilisateur est un membre du personnel et n'a pas de reservation
+            }else{
+                while (true) {
+                    ihm.message("Vous pouvez reserver jusqu'à 2 places");
+                    if(ihm.demandePlanDesTables()) {
+                        ihm.message(gala.toStringLesTables(typeParticipant));
+                        int numTable = ihm.choixTable(typeParticipant);
+                        Table table = gala.retrouverTable(numTable);
+                        ihm.message("vous avez choisit la table numero "+numTable+" : \n"+table); // toString de table qui montre la composition de la table choisit
+                        int nombreDePlace=ihm.nbrPlace(2);
+                        if(table.getNbPlaceLibre() <= nombreDePlace){
+                            ctlReservation(numTable,nombreDePlace); // penser à faire distinction etudiant et personnel
+                            break;
+                        }else{
+                            ihm.message("vous avez demander un nombre de place invalide");
+                        }
 
+                    }else{
+                        int nombreDePlace = ihm.nbrPlace(2);
+                        ctlReservation(nombreDePlace);// attention surcharge de méthode
+                        break;
+                    }
+                }
+
+            }
+        // Si l'utilisateur est un étudiant
+        }else{
+            String etatReservation = gala.retrouverReservation(typeParticipant,numeroUtilisateur);
+            if ("reservation".equals(etatReservation)){
+                Reservation reservation=gala.getReservationLesReservation(numeroUtilisateur);
+                ihm.message("Vous avez reservez "+reservation.getNbDePlace()+" place(s)");
+            }else if("fileDAttente".equals(etatReservation)){
+                Reservation reservation=gala.getReservationFileDAttente(numeroUtilisateur);
+                ihm.message("Vous avez reservez "+reservation.getNbDePlace()+" place(s)");
+            }else if("aucune".equals(etatReservation)){
+                int nbrPlaceMax=gala.nbrPlaceMax(gala.getEtudiant(numeroUtilisateur));
+                ihm.message("Vous pouvez reserver jusqu'à "+nbrPlaceMax+" place(s)");
+                int nombreDePlace = ihm.nbrPlace(nbrPlaceMax);
+                ctlReservation(nombreDePlace);
+            }else{ //("enAttente")
+                Reservation reservation=gala.getReservationEnAttente(numeroUtilisateur);
+                while (true){
+                    ihm.message("Vous avez demander "+reservation.getNbDePlace()+" place(s)");
+                    if(ihm.confirmationReservation()){
+                        if(ihm.demandePlanDesTables()) {
+                            ihm.message(gala.toStringLesTables(typeParticipant));
+                            int numTable = ihm.choixTable(typeParticipant);
+                            Table table = gala.retrouverTable(numTable);
+                            ihm.message("vous avez choisit la table numero "+numTable+" : \n"+table); // toString de table qui montre la composition de la table choisit
+                            int nombreDePlace = ihm.nbrPlace(numTable);
+                            if (table.getNbPlaceLibre() <= nombreDePlace) {
+                                ctlReservation(numTable, nombreDePlace); // penser à faire distinction etudiant et personnel
+                                break;
+                            }
+                        }else{
+                            int nombreDePlace = ihm.nbrPlace(reservation.getNbDePlace());
+                            ctlReservation(nombreDePlace);// attention surcharge de méthode
+                            break;
+                        }
+
+                    }else{
+                        break;
+                    }
+                }
+            }
+        }
+        ctlQuitter();
+
+    }
+
+    /**
+     * Créer une nouvelle reservation attribué automatiquement avec une table avec assez de place libre
+     * attention a distingué etudiant et personnel pour savoir où est créer la reservation et
+     * ou chercher une table avec assez de places libre
+     * @param nombreDePlace
+     */
+    private void ctlReservation(int nombreDePlace) {
+    }
+
+    /**
+     * Créer une nouvelle reservation dans gala attention distingué etudiant et personnel
+     * pour savoir où créer la reservation
+     * @param numTable numero de table pour créer la reservation
+     * @param nombreDePlace nombre de table reservée
+     */
+    private void ctlReservation(int numTable, int nombreDePlace) {
     }
 
 

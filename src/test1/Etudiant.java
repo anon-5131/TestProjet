@@ -19,7 +19,16 @@ public class Etudiant extends Participant {
     }
 
     public boolean equals(Etudiant etudiant) {
-        return numeroEtudiant==etudiant.numeroEtudiant && nom.equals(etudiant.nom) ; // juste numeroPersonnel ? moins securisé
+        return numeroEtudiant==etudiant.numeroEtudiant;
+    }
+
+    /**
+     * lors de l'identification pour savoir si le numero correspond en même temps que le nom
+     * @param etudiant element à comparer
+     * @return true si le numero et le nom correspondes
+     */
+    public boolean correspond(Etudiant etudiant){
+        return numeroEtudiant==etudiant.numeroEtudiant && nom.equals(etudiant.nom);
     }
 
 }
