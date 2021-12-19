@@ -7,7 +7,11 @@ public class Main {
     public static void main(String[] args) {
         LocalDate dateDuGala = LocalDate.of(2021,12,25);
         Controleur controleur = new Controleur(dateDuGala);
-        System.out.println(controleur.ctlUtilisateurInscrit());
+        if(!(controleur.ctlUtilisateurInscrit())){
+            controleur.ctlInscription();
+        }
+        controleur.ctlMenuGestionPlace();
+
     }
 
 }

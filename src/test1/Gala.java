@@ -14,7 +14,7 @@ public class Gala implements Serializable {
     public final int NB_TABLES_PERS = 10 ; // 1 à 10
     private Set<Personnel> lePersonnel;
     private Set<Etudiant> lesEtudiants;
-    private List<Table> lesTables;
+    private List<Table> lesTables; // 0->inutiliser|personnel 1 à 10 | etudiant 11 à 25
     private Set<Personnel> lePersonnelInscrit;
     private Set<Etudiant> lesEtudiantsInscrit;
     private Set<Reservation> lesReservation; // si dans ce set --> place reservé

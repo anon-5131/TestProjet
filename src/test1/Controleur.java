@@ -15,6 +15,7 @@ public class Controleur {
 
         ihm = new Ihm();
         gala = new Gala();
+        ihm.message(gala.toString()); // affiche l'état, les contenu des conteneurs d'objets
         ctlIdentification(); // pour remplir les attributs identifiantUtilisateur et typeParticipant, et obligé l'utilisateur à s'identifier
         if (LocalDate.now().isAfter(dateDuGala.minusMonths(1))){
             ctlMiseAJourReservationAttente(); // après un mois fait avancer la file d'attente en fonction de la place et des désinscription
@@ -60,7 +61,8 @@ public class Controleur {
 
     /**
      * Inscrit un participant dans le set de la classe Gala correspondante (on a
-     * deja tester si il était présent grace à ctlUtilisateurInscrit)
+     * deja tester si il était présent grace à ctlUtilisateurInscrit) (lePersonelInscrit
+     * ou lesEtudiantsInscrit)
      */
     public void ctlInscription(){
 
@@ -86,7 +88,8 @@ public class Controleur {
 
     /**
      * Supprime toutes les demandes de reservation et ou les reservation
-     * qui le concerne  puis,
+     * qui le concerne  puis, (utilise atribut numero étudiant)
+     * (utilise java.getReservation...() en fonction etudiant ou personnel)
      * Désiscrit un participant dans le set de la classe Gala correspondante
      */
     public void ctlDesinscription(){
@@ -237,7 +240,7 @@ public class Controleur {
     /**
      * Créer une nouvelle reservation attribué automatiquement avec une table avec assez de place libre
      * attention a distingué etudiant et personnel pour savoir où est créer la reservation et
-     * ou chercher une table avec assez de places libre
+     * où chercher une table avec assez de places libre
      * @param nombreDePlace
      */
     private void ctlReservation(int nombreDePlace) {
