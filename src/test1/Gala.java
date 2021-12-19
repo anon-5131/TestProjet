@@ -1,10 +1,7 @@
 package test1;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Classe de ouf
@@ -17,7 +14,7 @@ public class Gala implements Serializable {
     public final int NB_TABLES_PERS = 10 ; // 1 à 10
     private Set<Personnel> lePersonnel;
     private Set<Etudiant> lesEtudiants;
-    private Set<Table> lesTables;
+    private List<Table> lesTables;
     private Set<Personnel> lePersonnelInscrit;
     private Set<Etudiant> lesEtudiantsInscrit;
     private Set<Reservation> lesReservation; // si dans ce set --> place reservé
@@ -27,7 +24,7 @@ public class Gala implements Serializable {
     public Gala() {
         lePersonnel=new HashSet<>(); // Pas du tout sûr
         lesEtudiants=new HashSet<>(); // Pas du tout sûr
-        lesTables=new HashSet<>(); // Pas du tout sûr
+        lesTables=new ArrayList<>(); // Pas du tout sûr
         lePersonnelInscrit=new HashSet<>(); // Pas du tout sûr
         lesEtudiantsInscrit=new HashSet<>(); // Pas du tout sûr
         lesReservation=new HashSet<>(); // Pas du tout sûr
