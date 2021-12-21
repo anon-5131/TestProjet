@@ -31,4 +31,7 @@ public class Etudiant extends Participant {
         return numeroEtudiant==etudiant.numeroEtudiant && nom.equals(etudiant.nom);
     }
 
+    public int getAnneeDeFormation() {
+        return anneeDeFormation;
+    }
 }

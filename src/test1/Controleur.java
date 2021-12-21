@@ -166,7 +166,7 @@ public class Controleur {
         if ("personnel".equals(typeParticipant)){
             if ("reservation".equals(gala.retrouverReservation("personnel",numeroUtilisateur))){
                 Reservation reservation=gala.getReservationLesReservation(numeroUtilisateur);
-                ihm.message("Vous avez reserver "+reservation.getNbDePlace()+" place(s)\nVous êtes inscrit à la table numéro "+reservation.getNumero()+".");
+                ihm.message("Vous avez reserver "+reservation.getNbDePlace()+" place(s)\nVous êtes inscrit à la table numéro "+reservation.getNumeroTable()+".");
             // Si l'utilisateur est un membre du personnel et n'a pas de reservation
             }else{
                 while (true) {

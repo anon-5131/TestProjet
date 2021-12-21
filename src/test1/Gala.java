@@ -7,9 +7,10 @@ import java.util.*;
  * Classe de ouf
  */
 public class Gala implements Serializable {
-    public final int TARIF1 = 10;
-    public final int TARIF2 = 15;
-    public final int TARIF3 = 20;
+    public static final int TARIF1 = 10;
+    public static final int TARIF2 = 15;
+    public static final int TARIF3 = 20;
+    public static final int NB_PLACES_TABLE = 8;
     public final int NB_TABLES_ETU = 15 ; // 11 à 25
     public final int NB_TABLES_PERS = 10 ; // 1 à 10
     private Set<Personnel> lePersonnel;
