@@ -42,7 +42,7 @@ public class Gala implements Serializable {
         if ("personnel".equals(type)) {
             // return lePersonnel.contains(new Personnel(num, nom)); ça marche pas // redefinir pour que le equals fonctionne
             for (Personnel personnel : lePersonnel){
-                if(personnel.correspond(new Personnel(num,nom))){
+                if(personnel.getNumeroPersonnel() == num && nom.equals(personnel.getNom())){
                     return true;
                 }
             }
@@ -50,7 +50,7 @@ public class Gala implements Serializable {
         } else { // ("etudiant".equals(type))
             // return lesEtudiants.contains(new Etudiant(num, nom)); ça marche pas // redefinir pour que le equals fonctionne
             for (Etudiant etudiant : lesEtudiants){
-                if(etudiant.correspond(new Etudiant(num,nom))){
+                if(etudiant.getNumeroEtudiant() == num && nom.equals(etudiant.getNom())){
                     return true;
                 }
             }
@@ -62,7 +62,7 @@ public class Gala implements Serializable {
         if ("personnel".equals(type)) {
            // return lePersonnelInscrit.contains(new Personnel(num, nom)); ça marche pas // redefinir pour que le equals fonctionne
             for (Personnel personnel : lePersonnelInscrit){
-                if(personnel.correspond(new Personnel(num,nom))){
+                if(personnel.getNumeroPersonnel() == num && nom.equals(personnel.getNom())){
                     return true;
                 }
             }
@@ -70,7 +70,7 @@ public class Gala implements Serializable {
         } else { // (type=="etudiant")
            // return lesEtudiantsInscrit.contains(new Etudiant(num, nom)); ça marche pas // redefinir pour que le equals fonctionne
             for (Etudiant etudiant : lesEtudiantsInscrit){
-                if(etudiant.correspond(new Etudiant(num,nom))){
+                if(etudiant.getNumeroEtudiant() == num && nom.equals(etudiant.getNom())){
                     return true;
                 }
             }
@@ -98,11 +98,7 @@ public class Gala implements Serializable {
     public String toStringLesTables(String typeParticipant) {
         String valeurDeRetour="";
         if ("personnel".equals(typeParticipant)){
-            if (NB_TABLES_PERS !=0){
-                int numeroMini=1;
-            }else{
-                int numeroMini=0; //il n'y a pas de table pour le personnel
-            }
+            int numeroMini=1;
             int numeroMaxi=NB_TABLES_PERS;
         }else{
             int numeroMini=NB_TABLES_PERS+1;
@@ -172,5 +168,34 @@ public class Gala implements Serializable {
      * @return 3 si 5ème années sinon 1
      */
     public int nbrPlaceMax(Object etudiant) {
+    }
+
+    public List<Table> getLesTables() {
+        return lesTables;
+    }
+
+    public Participant getParticipant(String typeParticipant, int numeroUtilisateur) {
+        if ("personnel".equals(typeParticipant)){
+            for (Personnel personnel : lePersonnel){
+                if (personnel.getNumeroPersonnel() == numeroUtilisateur){
+                    return personnel;
+                }
+            }
+        }else{
+            for (Etudiant etudiant : lesEtudiants){
+                if(etudiant.getNumeroEtudiant() == numeroUtilisateur){
+                    return etudiant;
+                }
+            }
+        }
+        return null; // comment on fait ?
+    }
+
+    public void ajouterReservation(int numero, int nombreDePlace, Participant participant, String typeParticipant){
+        if ("personnel".equals(typeParticipant)){
+            lesReservation.add(new Reservation(numero,nombreDePlace,participant));
+        }else{
+            fileDAttente.add(new Reservation(numero,nombreDePlace,participant));
+        }
     }
 }

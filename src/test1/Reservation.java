@@ -18,6 +18,14 @@ public class Reservation implements Serializable {
         this.possesseur=possesseur;
     }
 
+
+    /**
+     * Calcul le montant de la reservation en fonction des tarif pour un étudiant
+     * ou un membre du personnel
+     * @param possesseur "personnel" ou "etudiant"
+     * @param nbDePlace nombre de place reserver pour savoir le nombre d'acompagnateur
+     * @return le prix de la reservation
+     */
     private double calculMontant(Participant possesseur, int nbDePlace) {
         double montant = 0;
         if (possesseur instanceof Personnel){

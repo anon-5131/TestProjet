@@ -10,7 +10,7 @@ public class Controleur {
     private String nomUtilisateur;
     private int numeroUtilisateur;
 
-    public Controleur(LocalDate dateDuGala){
+    public Controleur(LocalDate dateDuGala) throws Quitter {
         // TODO mettre en place le systeme de sauvegarde et de chargement avec un try catch / scanner(new File ())
 
         ihm = new Ihm();
@@ -103,8 +103,8 @@ public class Controleur {
      * quitte l'application (je sais pas comment faire)
      *
      */
-    public void ctlQuitter(){
-
+    public void ctlQuitter() throws Quitter {
+        throw new Quitter("Fermeture du programme");
     }
 
     /**
@@ -244,6 +244,30 @@ public class Controleur {
      * @param nombreDePlace
      */
     private void ctlReservation(int nombreDePlace) {
+        int numeroMini=0; // COMMENT QU ON FAIT
+        int numeroMaxi=0; // COMMENT QU ON FAIT
+        boolean aTrouver=false;
+        if ("personnel".equals(typeParticipant)){
+            numeroMini=1; // int numeroMini=1;
+            numeroMaxi= gala.NB_TABLES_PERS;//int numeroMaxi=gala.NB_TABLES_PERS;
+        }else{
+            numeroMini = gala.NB_TABLES_PERS+1;//int numeroMini=gala.NB_TABLES_PERS+1;
+            numeroMaxi = gala.NB_TABLES_PERS+gala.NB_TABLES_ETU;//int numeroMaxi= gala.NB_TABLES_PERS+gala.NB_TABLES_ETU;
+        }
+        int numero = 0; // COMMENT QU ON FAIT
+        for (Table table : gala.getLesTables()){
+            numero = table.getNumero()// int numero = table.getNumero();
+            if (numero>=numeroMini && numero<=numeroMaxi){
+                if (table.getNbPlaceLibre()>=nombreDePlace){
+                    aTrouver=true;
+                }
+            }
+        }
+        if(aTrouver){
+            gala.ajouterReservation(numero,nombreDePlace,gala.getParticipant(typeParticipant,numeroUtilisateur),typeParticipant);
+            // ajouter ctlReservation si date ?
+        }
+
     }
 
     /**
@@ -253,6 +277,8 @@ public class Controleur {
      * @param nombreDePlace nombre de table reservée
      */
     private void ctlReservation(int numTable, int nombreDePlace) {
+        gala.ajouterReservation(numTable,nombreDePlace,gala.getParticipant(typeParticipant,numeroUtilisateur),typeParticipant);
+        // ajouter ctlReservation si date ?
     }
 
 
@@ -263,7 +289,7 @@ public class Controleur {
      * Cette méthode est executer à chaque lancement quand le gala est
      * dans moins d'un mois (géréer dans le controleur)
      */
-    public void ctlMiseAJourReservationAttente(){
+    public void ctlMiseAJourReservationAttente() {
 
     }
 

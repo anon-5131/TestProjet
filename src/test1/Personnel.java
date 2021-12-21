@@ -20,13 +20,7 @@ public class Personnel extends Participant {
         return numeroPersonnel==personnel.numeroPersonnel;
     }
 
-    /**
-     * * lors de l'identification pour savoir si le numero correspond en même temps que le nom
-     * @param personnel element à comparer
-     * @return true si le numero et le nom correspondes
-     */
-
-    public boolean correspond(Personnel personnel){
-        return numeroPersonnel==personnel.numeroPersonnel && nom.equals(personnel.nom) ;
+    public int getNumeroPersonnel() {
+        return numeroPersonnel;
     }
 }

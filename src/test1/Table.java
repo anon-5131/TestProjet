@@ -26,6 +26,10 @@ public class Table implements Serializable {
         return numero;
     }
 
+    /**
+     * retourne la composition (les noms) de la tables
+     * @return
+     */
     @Override
     public String toString() {
         String valeurDeRetour="Composition de la table numero"+numero+" :\n";
