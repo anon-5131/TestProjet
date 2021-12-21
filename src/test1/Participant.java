@@ -17,4 +17,9 @@ abstract class Participant implements Serializable {
 
     public Participant(){ // Pour pouvoir appeler des sous classe sans tout déclarer
     }
+
+
+    public String getNom() {
+        return nom;
+    }
 }

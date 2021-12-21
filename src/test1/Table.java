@@ -21,4 +21,17 @@ public class Table implements Serializable {
     public int getNbPlaceLibre() {
         return nbPlaceLibre;
     }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    @Override
+    public String toString() {
+        String valeurDeRetour="Composition de la table numero"+numero+" :\n";
+        for (Participant participant : PersonneAffectees){
+            valeurDeRetour+="- "+participant.getNom()+"\n";
+        }
+        return valeurDeRetour;
+    }
 }

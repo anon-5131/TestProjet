@@ -96,6 +96,25 @@ public class Gala implements Serializable {
      * @return affichage composition des tables
      */
     public String toStringLesTables(String typeParticipant) {
+        String valeurDeRetour="";
+        if ("personnel".equals(typeParticipant)){
+            if (NB_TABLES_PERS !=0){
+                int numeroMini=1;
+            }else{
+                int numeroMini=0; //il n'y a pas de table pour le personnel
+            }
+            int numeroMaxi=NB_TABLES_PERS;
+        }else{
+            int numeroMini=NB_TABLES_PERS+1;
+            int numeroMaxi=NB_TABLES_PERS+NB_TABLES_ETU;
+        }
+        for (Table table : lesTables){
+            int numero = table.getNumero();
+            if ( numero>=numeroMini && numero<=numeroMaxi){ // PK ça marche pas ?
+                valeurDeRetour+=table.toString();
+            }
+        }
+        return valeurDeRetour;
     }
 
 
