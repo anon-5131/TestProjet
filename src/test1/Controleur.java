@@ -1,6 +1,10 @@
 package test1;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Scanner;
 
 public class Controleur {
     private Ihm ihm;
@@ -10,11 +14,25 @@ public class Controleur {
     private String nomUtilisateur;
     private int numeroUtilisateur;
 
-    public Controleur(LocalDate dateDuGala){
+    public Controleur(LocalDate dateDuGala) throws Quitter {
         // TODO mettre en place le systeme de sauvegarde et de chargement avec un try catch / scanner(new File ())
-
         ihm = new Ihm();
-        gala = new Gala();
+        try{
+            Scanner scanner =new Scanner(new File("gala.ser")); // regarder si le fichier gala.ser existe
+            ServiceStockage serviceStockage = new ServiceStockage();
+            gala=(Gala)serviceStockage.charger();
+            System.out.println("bonjour");
+        }catch(IOException | ClassNotFoundException e ){
+            System.out.println(e.getMessage());
+            try {
+                gala = new Gala();
+                System.out.println("bonsoir");
+            }catch (Exception exception){
+                ihm.message(exception.getMessage());
+                throw new Quitter("Fermeture du programme");
+            }
+        }
+
         ihm.message(gala.toString()); // affiche l'état, les contenu des conteneurs d'objets
         ctlIdentification(); // pour remplir les attributs identifiantUtilisateur et typeParticipant, et obligé l'utilisateur à s'identifier
         if (LocalDate.now().isAfter(dateDuGala.minusMonths(1))){
@@ -83,7 +101,6 @@ public class Controleur {
 
     public void ctlMenuGestionPlace() throws Quitter {
         ctlReservation(2);
-        ctlReservation(3,4);
         System.out.println(gala.toStringLesTables(typeParticipant));
         ctlQuitter();
     }
@@ -107,6 +124,12 @@ public class Controleur {
      *
      */
     public void ctlQuitter() throws Quitter {
+        try {
+            ServiceStockage serviceStockage= new ServiceStockage();
+            serviceStockage.enregistrer(gala);
+        } catch (IOException e) {
+            throw new Quitter("Erreur dans la sauvegarde");
+        }
         throw new Quitter("Fermeture du programme");
     }
 
@@ -289,13 +312,13 @@ public class Controleur {
 
     /**
      * Mais à jour le set des reservation dont la réservation est en attente
-     * en fonction du nombre total de place et des désinscriptions.
+     * en fonction du nombre total de place et du nombre déjà en attente.
      *
      * Cette méthode est executer à chaque lancement quand le gala est
      * dans moins d'un mois (géréer dans le controleur)
      */
     public void ctlMiseAJourReservationAttente() {
-
+        gala.miseAJourReservationAttente();
     }
 
 }

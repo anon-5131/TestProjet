@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
         try{
-            LocalDate dateDuGala = LocalDate.of(2021,12,25);
+            LocalDate dateDuGala = LocalDate.of(2022,12,25);
             Controleur controleur = new Controleur(dateDuGala);
             if(!(controleur.ctlUtilisateurInscrit())){
                 //controleur.ctlInscription();

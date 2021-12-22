@@ -1,5 +1,8 @@
 package test1;
 
+
+import java.util.Objects;
+
 public class Etudiant extends Participant {
     private int anneeDeFormation;
     private int numeroEtudiant;
@@ -12,8 +15,17 @@ public class Etudiant extends Participant {
         this.anneeDeFormation = anneeDeFormation;
     }
 
-    public boolean equals(Etudiant etudiant) {
-        return numeroEtudiant==etudiant.numeroEtudiant;
+    @Override
+    public boolean equals(Object obj) {
+        if(obj != null && obj instanceof Etudiant){
+            return numeroEtudiant == ((Etudiant)obj).numeroEtudiant;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(numeroEtudiant);
     }
 
     public int getAnneeDeFormation() {
@@ -23,4 +35,5 @@ public class Etudiant extends Participant {
     public int getNumeroEtudiant() {
         return numeroEtudiant;
     }
+
 }
