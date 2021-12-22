@@ -7,13 +7,13 @@ import java.util.Set;
 public class Table implements Serializable {
     private int numero;
     private int nbPlaceLibre;
-    private Set<Participant> PersonneAffectees;
-    private static int numeroSuivant=1;
+    private Set<Reservation> reservationsAssociee;
+    private static int numeroSuivant=0;
 
     public Table (){
-        numero=++numeroSuivant;
+        numero=numeroSuivant++;
         nbPlaceLibre=Gala.NB_PLACES_TABLE;
-        PersonneAffectees = new HashSet<>();
+        reservationsAssociee = new HashSet<>();
 
     }
 
@@ -33,9 +33,22 @@ public class Table implements Serializable {
     @Override
     public String toString() {
         String valeurDeRetour="Composition de la table numero"+numero+" :\n";
-        for (Participant participant : PersonneAffectees){
-            valeurDeRetour+="- "+participant.getNom()+"\n";
+        for (Reservation reservation : reservationsAssociee){
+            valeurDeRetour+="- "+reservation.getPossesseur().getNom();
+            if (reservation.getNbDePlace() > 1){
+                valeurDeRetour+=" + accompagnant\n";
+            }else{
+                valeurDeRetour+="\n";
+            }
+        }
+        for (int i=0;i<nbPlaceLibre;i++){
+            valeurDeRetour+="- Place disponible\n";
         }
         return valeurDeRetour;
+    }
+
+    public void ajouterReservation(Reservation reservation) {
+        reservationsAssociee.add(reservation);
+        nbPlaceLibre-=reservation.getNbDePlace();
     }
 }

@@ -3,7 +3,7 @@ package test1;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Reservation implements Serializable {
+public class Reservation implements Serializable, Comparable<Reservation> {
     private LocalDate date;
     private int numeroTable;
     private int nbDePlace;
@@ -48,5 +48,26 @@ public class Reservation implements Serializable {
 
     public int getNbDePlace() {
         return nbDePlace;
+    }
+
+    public Participant getPossesseur() {
+        return possesseur;
+    }
+
+    @Override
+    public int compareTo(Reservation o) {
+        if (possesseur instanceof Personnel){
+            return 0;
+        }else {
+            if (((Etudiant)possesseur).getAnneeDeFormation()==5 && ((Etudiant)o.getPossesseur()).getAnneeDeFormation()==5){
+                return 0;
+            }else if(((Etudiant)possesseur).getAnneeDeFormation()==5 && ((Etudiant)o.getPossesseur()).getAnneeDeFormation()!=5){
+                return 1;
+            }else if(((Etudiant)possesseur).getAnneeDeFormation()!=5 && ((Etudiant)o.getPossesseur()).getAnneeDeFormation()==5){
+                return -1;
+            }else{
+                return 0;
+            }
+        }
     }
 }

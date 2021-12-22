@@ -10,7 +10,7 @@ public class Controleur {
     private String nomUtilisateur;
     private int numeroUtilisateur;
 
-    public Controleur(LocalDate dateDuGala) throws Quitter {
+    public Controleur(LocalDate dateDuGala){
         // TODO mettre en place le systeme de sauvegarde et de chargement avec un try catch / scanner(new File ())
 
         ihm = new Ihm();
@@ -81,8 +81,11 @@ public class Controleur {
      * 3 - ctlQuitter()
      */
 
-    public void ctlMenuGestionPlace(){
-
+    public void ctlMenuGestionPlace() throws Quitter {
+        ctlReservation(2);
+        ctlReservation(3,4);
+        System.out.println(gala.toStringLesTables(typeParticipant));
+        ctlQuitter();
     }
 
 
@@ -162,7 +165,8 @@ public class Controleur {
      *
      *
      */
-    public void ctlgestionPlace(){
+    /*
+    public void ctlgestionPlace() throws Quitter {
         if ("personnel".equals(typeParticipant)){
             if ("reservation".equals(gala.retrouverReservation("personnel",numeroUtilisateur))){
                 Reservation reservation=gala.getReservationLesReservation(numeroUtilisateur);
@@ -236,7 +240,7 @@ public class Controleur {
         ctlQuitter();
 
     }
-
+*/
     /**
      * Créer une nouvelle reservation attribué automatiquement avec une table avec assez de place libre
      * attention a distingué etudiant et personnel pour savoir où est créer la reservation et
@@ -256,10 +260,11 @@ public class Controleur {
         }
         int numero = 0; // COMMENT QU ON FAIT
         for (Table table : gala.getLesTables()){
-            numero = table.getNumero()// int numero = table.getNumero();
+            numero = table.getNumero();// int numero = table.getNumero();
             if (numero>=numeroMini && numero<=numeroMaxi){
                 if (table.getNbPlaceLibre()>=nombreDePlace){
                     aTrouver=true;
+                    break;
                 }
             }
         }

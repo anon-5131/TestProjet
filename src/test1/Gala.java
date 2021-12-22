@@ -26,6 +26,9 @@ public class Gala implements Serializable {
         lePersonnel=new HashSet<>(); // Pas du tout sûr
         lesEtudiants=new HashSet<>(); // Pas du tout sûr
         lesTables=new ArrayList<>(); // Pas du tout sûr
+        for (int i=0; i<26;i++){
+            lesTables.add(new Table());
+        }
         lePersonnelInscrit=new HashSet<>(); // Pas du tout sûr
         lesEtudiantsInscrit=new HashSet<>(); // Pas du tout sûr
         lesReservation=new HashSet<>(); // Pas du tout sûr
@@ -85,9 +88,8 @@ public class Gala implements Serializable {
      * @param numeroUtilisateur numero pour savoir si le
      * @return si dans lesReservation->"reservation" || lesReservationEnAttente->"enAttente" || fileDAttente->"fileDAttente" || si dans aucune->"aucune"
      */
-    public String retrouverReservation(String typeUtilisateur,int numeroUtilisateur){
-
-    }
+    //public String retrouverReservation(String typeUtilisateur,int numeroUtilisateur){
+    //}
 
 
     /**
@@ -96,13 +98,15 @@ public class Gala implements Serializable {
      * @return affichage composition des tables
      */
     public String toStringLesTables(String typeParticipant) {
+        int numeroMini=0; // Comment on fait ?
+        int numeroMaxi=0; // Comment on fait ?
         String valeurDeRetour="";
         if ("personnel".equals(typeParticipant)){
-            int numeroMini=1;
-            int numeroMaxi=NB_TABLES_PERS;
+            numeroMini=1;//int numeroMini=1;
+            numeroMaxi=NB_TABLES_PERS;//int numeroMaxi=NB_TABLES_PERS;
         }else{
-            int numeroMini=NB_TABLES_PERS+1;
-            int numeroMaxi=NB_TABLES_PERS+NB_TABLES_ETU;
+            numeroMini=NB_TABLES_PERS+1;//int numeroMini=NB_TABLES_PERS+1;
+            numeroMaxi=NB_TABLES_PERS+NB_TABLES_ETU;//int numeroMaxi=NB_TABLES_PERS+NB_TABLES_ETU;
         }
         for (Table table : lesTables){
             int numero = table.getNumero();
@@ -119,8 +123,8 @@ public class Gala implements Serializable {
      * @param numTable numero de la table chercher
      * @return table que l'on cherche
      */
-    public Table retrouverTable(int numTable) {
-    }
+    //public Table retrouverTable(int numTable) {
+    //}
 
 
     /**
@@ -128,9 +132,8 @@ public class Gala implements Serializable {
      * @param numeroUtilisateur de la personne qui possede la reservation
      * @return la reservation correspondate
      */
-    public Reservation getReservationLesReservation(int numeroUtilisateur){
-
-    }
+    //public Reservation getReservationLesReservation(int numeroUtilisateur){
+    //}
 
 
     /**
@@ -138,8 +141,8 @@ public class Gala implements Serializable {
      * @param numeroUtilisateur de la personne qui possede la reservation
      * @return la reservation correspondate
      */
-    public Reservation getReservationFileDAttente(int numeroUtilisateur) {
-    }
+    //public Reservation getReservationFileDAttente(int numeroUtilisateur) {
+    //}
 
 
     /**
@@ -147,8 +150,8 @@ public class Gala implements Serializable {
      * @param numeroUtilisateur de la personne qui possede la reservation
      * @return la reservation correspondate
      */
-    public Reservation getReservationEnAttente(int numeroUtilisateur) {
-    }
+    //public Reservation getReservationEnAttente(int numeroUtilisateur) {
+    //}
 
 
     /**
@@ -156,19 +159,19 @@ public class Gala implements Serializable {
      * @param numeroUtilisateur numero qu'on cherche
      * @return etudiant rechercher
      */
-    public Object getEtudiant(int numeroUtilisateur) {
-    }
+    //public Object getEtudiant(int numeroUtilisateur) {
+    //}
 
 
     /**
      * Retourne le nombre de place maximum qu'un étudiant peut reserver en fonction
      * de ses années de formation
-     * @param etudiant etudiant dont on veut savoir le nombre max de place qui peut
+     * // @param etudiant etudiant dont on veut savoir le nombre max de place qui peut
      *                 reserver
-     * @return 3 si 5ème années sinon 1
+     * @return 3 si 5ème années sinon 2
      */
-    public int nbrPlaceMax(Object etudiant) {
-    }
+    //public int nbrPlaceMax(Object etudiant) {
+    //}
 
     public List<Table> getLesTables() {
         return lesTables;
@@ -192,10 +195,12 @@ public class Gala implements Serializable {
     }
 
     public void ajouterReservation(int numero, int nombreDePlace, Participant participant, String typeParticipant){
+        Reservation nouvelleReservation = new Reservation(numero,nombreDePlace,participant);
         if ("personnel".equals(typeParticipant)){
-            lesReservation.add(new Reservation(numero,nombreDePlace,participant));
+            lesReservation.add(nouvelleReservation);
         }else{
-            fileDAttente.add(new Reservation(numero,nombreDePlace,participant));
+            fileDAttente.add(nouvelleReservation);
         }
+        lesTables.get(numero).ajouterReservation(nouvelleReservation);
     }
 }

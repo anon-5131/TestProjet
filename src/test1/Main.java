@@ -9,7 +9,8 @@ public class Main {
             LocalDate dateDuGala = LocalDate.of(2021,12,25);
             Controleur controleur = new Controleur(dateDuGala);
             if(!(controleur.ctlUtilisateurInscrit())){
-                controleur.ctlInscription();
+                //controleur.ctlInscription();
+                controleur.ctlMenuGestionPlace();
             }
             controleur.ctlMenuGestionPlace();
         }catch(Quitter e) {

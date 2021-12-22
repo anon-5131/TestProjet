@@ -72,30 +72,30 @@ public class Ihm {
      * demande à l'utilisateur si il veux voir le plan des tables
      * @return true si oui/Oui/O/Yes/yes/y || false si non/Non/N/No/no
      */
-    public boolean demandePlanDesTables() {
-    }
+    //public boolean demandePlanDesTables() {
+    //}
 
     /**
      * Demande à l'utilisateur le numero de table choisit
      * @param typeParticipant si etudiant personne choisit entre 1 et 10 si personnel entre 11 et 25
      * @return le nombre choisit
      */
-    public int choixTable(String typeParticipant) {
-    }
+    //public int choixTable(String typeParticipant) {
+    //}
 
     /**
      * Demande le nombre de place que l'utilisateur choisit, renvoie se nombre si il est compris entre 1 et limiteNombreDePlace
      * @param limiteNombreDePlace la limite que l'utilisateur peut choisir
      * @return le nombre de place choisit
      */
-    public int nbrPlace(int limiteNombreDePlace) {
-    }
+    //public int nbrPlace(int limiteNombreDePlace) {
+    //}
 
 
     /**
      * Demmande à l'utilisateur si il veut confirmer ça reservation
      * @return true si oui/Oui/O/Yes/yes/y || false si non/Non/N/No/no
      */
-    public boolean confirmationReservation() {
-    }
+    //public boolean confirmationReservation() {
+    //}
 }

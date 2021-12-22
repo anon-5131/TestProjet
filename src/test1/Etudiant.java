@@ -12,12 +12,6 @@ public class Etudiant extends Participant {
         this.anneeDeFormation = anneeDeFormation;
     }
 
-    // utiliser pour faire des comparaison grâce à équals pour faire des contains dans des set par exemple
-    public Etudiant(int numeroEtudiant, String nom){
-        this.nom=nom;
-        this.numeroEtudiant=numeroEtudiant;
-    }
-
     public boolean equals(Etudiant etudiant) {
         return numeroEtudiant==etudiant.numeroEtudiant;
     }

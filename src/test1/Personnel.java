@@ -10,12 +10,6 @@ public class Personnel extends Participant {
 
     }
 
-    // utiliser pour faire des comparaison grâce à équals pour faire des contains dans des set par exemple
-    public Personnel(int numeroPersonnel, String nom){
-        this.numeroPersonnel=numeroPersonnel;
-        this.nom=nom;
-    }
-
     public boolean equals(Personnel personnel) {
         return numeroPersonnel==personnel.numeroPersonnel;
     }

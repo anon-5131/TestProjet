@@ -15,9 +15,6 @@ abstract class Participant implements Serializable {
         this.mail = mail;
     }
 
-    public Participant(){ // Pour pouvoir appeler des sous classe sans tout déclarer
-    }
-
 
     public String getNom() {
         return nom;
