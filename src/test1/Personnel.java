@@ -26,6 +26,11 @@ public class Personnel extends Participant {
         return Objects.hashCode(numeroPersonnel);
     }
 
+    @Override
+    public int getNumero() {
+        return numeroPersonnel;
+    }
+
     public int getNumeroPersonnel() {
         return numeroPersonnel;
     }

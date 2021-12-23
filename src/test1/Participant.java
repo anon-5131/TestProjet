@@ -19,4 +19,6 @@ abstract class Participant implements Serializable {
     public String getNom() {
         return nom;
     }
+
+    abstract public int getNumero();
 }

@@ -28,6 +28,11 @@ public class Etudiant extends Participant {
         return Objects.hashCode(numeroEtudiant);
     }
 
+    @Override
+    public int getNumero() {
+        return numeroEtudiant;
+    }
+
     public int getAnneeDeFormation() {
         return anneeDeFormation;
     }
@@ -35,5 +40,6 @@ public class Etudiant extends Participant {
     public int getNumeroEtudiant() {
         return numeroEtudiant;
     }
+
 
 }

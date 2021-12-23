@@ -2,6 +2,7 @@ package test1;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Reservation implements Serializable, Comparable<Reservation> {
     private LocalDate date;
@@ -52,6 +53,19 @@ public class Reservation implements Serializable, Comparable<Reservation> {
 
     public Participant getPossesseur() {
         return possesseur;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(possesseur.getNumero());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj != null && obj instanceof Reservation){
+            return possesseur.getNumero() == ((Reservation)obj).possesseur.getNumero();
+        }
+        return false;
     }
 
     @Override
