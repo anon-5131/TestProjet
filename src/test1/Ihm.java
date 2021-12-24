@@ -72,24 +72,73 @@ public class Ihm {
      * demande à l'utilisateur si il veux voir le plan des tables
      * @return true si oui/Oui/O/Yes/yes/y || false si non/Non/N/No/no
      */
-    //public boolean demandePlanDesTables() {
-    //}
+    public boolean demandePlanDesTables() {
+        while (true) {
+            System.out.println("Voulez vous voir le plan des tables ?(oui/non)");
+            if (input.hasNext()) {
+                String reponse = input.next().toLowerCase();
+                if (reponse.equals("oui") || reponse.equals("o") || reponse.equals("yes") || reponse.equals("y")) {
+                    return true;
+                } else if (reponse.equals("non") || reponse.equals("n") || reponse.equals("no")) {
+                    return false;
+                }
+            }else{
+                System.out.println("Erreur, veuillez choisir 'oui' ou 'non'");
+                input.next();
+            }
+        }
+    }
 
     /**
      * Demande à l'utilisateur le numero de table choisit
      * @param typeParticipant si etudiant personne choisit entre 1 et 10 si personnel entre 11 et 25
      * @return le nombre choisit
      */
-    //public int choixTable(String typeParticipant) {
-    //}
+    public int choixTable(String typeParticipant) {
+        while (true) {
+            System.out.println("Veuillez entrer le numéro de la table");
+            if (input.hasNext()) {
+                if (input.hasNextInt()) {
+                    int reponse = input.nextInt();
+                    if (typeParticipant.equals("etudiant") && reponse >0 && reponse<=10 || typeParticipant.equals("personnel") && reponse > 10 && reponse<=25) {
+                        return reponse;
+                    } else {
+                        System.out.println("Erreur, veuillez choisir le bon numéro en fonction de votre type de participant");
+                    }
+                } else {
+                    System.out.println("Erreur, veuillez entrer un entier");
+                    input.next();
+                }
+            }
+        }
+    }
 
     /**
      * Demande le nombre de place que l'utilisateur choisit, renvoie se nombre si il est compris entre 1 et limiteNombreDePlace
      * @param limiteNombreDePlace la limite que l'utilisateur peut choisir
      * @return le nombre de place choisit
      */
-    //public int nbrPlace(int limiteNombreDePlace) {
-    //}
+    public int nbrPlace(int limiteNombreDePlace) {
+        while(true){
+            System.out.println("Limite du nombre de place " + limiteNombreDePlace);
+            System.out.println("Choisir le nombre de place");
+            if (input.hasNext()){
+                if (input.hasNextInt()){
+                    int reponse = input.nextInt();
+                    if (reponse> 0 && reponse<=limiteNombreDePlace){
+                        return reponse;
+                    }else{
+                        System.out.println("Erreur, choisir un nombre entre 1 et " + limiteNombreDePlace);
+
+                    }
+
+                }else{
+                    System.out.println("Veuillez entrer un entier");
+                    input.next();
+                }
+            }
+        }
+    }
 
 
     /**

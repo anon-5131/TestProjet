@@ -113,7 +113,11 @@ public class Controleur {
      * Désiscrit un participant dans le set de la classe Gala correspondante
      */
     public void ctlDesinscription(){
-
+        Reservation reservation = gala.retrouverReservation(typeParticipant,numeroUtilisateur);
+        if (reservation != null){
+            gala.supprimerReservation(reservation);
+            gala.desinscription(typeParticipant, numeroUtilisateur);
+        }
     }
 
 

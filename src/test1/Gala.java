@@ -45,9 +45,13 @@ public class Gala implements Serializable {
         }
         lePersonnelInscrit=new HashSet<>(); // Pas du tout sûr
         lesEtudiantsInscrit=new HashSet<>(); // Pas du tout sûr
+        lesEtudiantsInscrit.add(new Etudiant(2165001,"MARTIN","ADAM","638412609","adam.martin@etu-ec.fr",1));
         lesReservation=new HashSet<>(); // Pas du tout sûr
+        lesReservation.add(new Reservation(15,1,new Etudiant(1234,"DUPONT","MARTIN","06","email",5)));
+
         lesReservationEnAttente=new HashSet<>(); // Pas du tout sûr
         fileDAttente = new PriorityQueue<>(); // Pas du tout sûr
+        fileDAttente.add(new Reservation(15,1,new Personnel(1111,"JOJO","John","06","email2")));
         lesEtudiants.add(new Etudiant(2165001,"MARTIN","ADAM","638412609","adam.martin@etu-ec.fr",1)); // pour faire des test
         lesEtudiantsInscrit.add(new Etudiant(2165001,"MARTIN","ADAM","638412609","adam.martin@etu-ec.fr",1));
         lePersonnel.add(new Personnel(5110,"ALBERTIER","VINCENT","645202213","vincent.albertier@ec.fr"));
@@ -113,8 +117,33 @@ public class Gala implements Serializable {
      * @param numeroUtilisateur numero pour savoir si le
      * @return si dans lesReservation->"reservation" || lesReservationEnAttente->"enAttente" || fileDAttente->"fileDAttente" || si dans aucune->"aucune"
      */
-    //public String retrouverReservation(String typeUtilisateur,int numeroUtilisateur){
-    //}
+    public Reservation retrouverReservation(String typeUtilisateur,int numeroUtilisateur) {
+
+        for (Reservation reservation : lesReservation) {
+            if (typeUtilisateur.equals("etudiant")) {
+                if (reservation.getPossesseur().getNumero() == numeroUtilisateur) {
+                    return reservation;
+                }
+            } else if (typeUtilisateur.equals("personnel")) {
+                if (reservation.getPossesseur().getNumero() == numeroUtilisateur) {
+                    return reservation;
+                }
+            }
+        }
+
+        if (typeUtilisateur.equals("personnel")) {
+            for (Reservation reservationEnAttente : lesReservationEnAttente) {
+                if (reservationEnAttente.getPossesseur().getNumero() == numeroUtilisateur) {
+                    return reservationEnAttente;
+                }
+            }
+            for (Reservation fileDattente : fileDAttente) {
+                if (fileDattente.getPossesseur().getNumero() == numeroUtilisateur) {
+                    return fileDattente;
+                }
+            }
+        }return null;
+    }
 
 
     /**
@@ -167,7 +196,7 @@ public class Gala implements Serializable {
      * @return la reservation correspondate
      */
     //public Reservation getReservationLesReservation(int numeroUtilisateur){
-    //}
+      //  return null;}
 
 
     /**
@@ -176,7 +205,7 @@ public class Gala implements Serializable {
      * @return la reservation correspondate
      */
     //public Reservation getReservationFileDAttente(int numeroUtilisateur) {
-    //}
+      //  return null;}
 
 
     /**
@@ -185,7 +214,7 @@ public class Gala implements Serializable {
      * @return la reservation correspondate
      */
     //public Reservation getReservationEnAttente(int numeroUtilisateur) {
-    //}
+      //  return null;}
 
 
     /**
@@ -194,8 +223,15 @@ public class Gala implements Serializable {
      * @param numeroUtilisateur numero qu'on cherche
      * @return etudiant rechercher
      */
-    //public Etudiant getEtudiant(int numeroUtilisateur) {
-    //}
+    public Etudiant getEtudiant(int numeroUtilisateur) {
+        for (Etudiant etudiant : lesEtudiants){
+            if (etudiant.getNumeroEtudiant() == numeroUtilisateur){
+                return etudiant;
+            }
+        }
+        System.out.println("Etudiant introuvable avec ce numero Utilisateur");
+        return null;
+    }
 
 
     /**
@@ -205,8 +241,13 @@ public class Gala implements Serializable {
      *                 reserver
      * @return 3 si 5ème années sinon 2
      */
-    //public int nbrPlaceMax(Object etudiant) {
-    //}
+    public int nbrPlaceMax(Etudiant etudiant) {
+        if(etudiant.getAnneeDeFormation()==5){
+            return 3;
+        }else{
+            return 2;
+        }
+    }
 
     public List<Table> getLesTables() {
         return lesTables;
@@ -286,6 +327,7 @@ public class Gala implements Serializable {
         return valeurDeRetour;
     }
 
+
     @Override
     public String toString() {
         String valeurDeRetour = "";
@@ -314,5 +356,44 @@ public class Gala implements Serializable {
             valeurDeRetour+= reservation.toString();
         }
         return valeurDeRetour;
+    }
+
+    public void supprimerReservation(Reservation reservation) {
+        for (Reservation lesReservation : lesReservation) {
+            if (lesReservation.equals(reservation)) {
+                this.lesReservation.remove(reservation);
+                lesTables.get(reservation.getNumeroTable()).supprimerReservation(reservation);
+            }
+        }
+        for (Reservation reservationEnAttente : lesReservationEnAttente) {
+            if (reservationEnAttente.equals(reservation)) {
+                this.lesReservationEnAttente.remove(reservation);
+                lesTables.get(reservation.getNumeroTable()).supprimerReservation(reservation);
+            }
+        }
+        for (Reservation fileDattente : fileDAttente) {
+            if (fileDattente.equals(reservation)) {
+                this.fileDAttente.remove(reservation);
+                lesTables.get(reservation.getNumeroTable()).supprimerReservation(reservation);
+            }
+        }
+    }
+
+    public void desinscription(String typeParticipant, int numeroUtilisateur) {
+        if(typeParticipant.equals("etudiant")){
+            lesEtudiantsInscrit.remove(getEtudiant(numeroUtilisateur));
+        }
+        else if (typeParticipant.equals("personnel")){
+            lePersonnelInscrit.remove(getPersonnel(numeroUtilisateur));
+        }
+    }
+    public Personnel getPersonnel(int numeroUtilisateur) {
+        for (Personnel personnel : lePersonnel){
+            if (personnel.getNumeroPersonnel() == numeroUtilisateur){
+                return personnel;
+            }
+        }
+        System.out.println("Personnel introuvable avec ce numero Utilisateur");
+        return null;
     }
 }

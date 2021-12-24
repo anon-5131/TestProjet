@@ -34,4 +34,5 @@ public class Personnel extends Participant {
     public int getNumeroPersonnel() {
         return numeroPersonnel;
     }
+
 }

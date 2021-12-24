@@ -51,4 +51,9 @@ public class Table implements Serializable {
         reservationsAssociee.add(reservation);
         nbPlaceLibre-=reservation.getNbDePlace();
     }
+
+    public void supprimerReservation(Reservation reservation) {
+        reservationsAssociee.remove(reservation);
+        nbPlaceLibre+=reservation.getNbDePlace();
+    }
 }
