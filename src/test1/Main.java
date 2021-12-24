@@ -1,9 +1,23 @@
 package test1;
 
+import java.time.LocalDate;
+
 public class Main {
 
     public static void main(String[] args) {
-        // write your code here
+        try{
+            LocalDate dateDuGala = LocalDate.of(2022,12,25);
+            Controleur controleur = new Controleur(dateDuGala);
+            if(!(controleur.ctlUtilisateurInscrit())){
+                //controleur.ctlInscription();
+                controleur.ctlMenuGestionPlace();
+            }
+            controleur.ctlMenuGestionPlace();
+        }catch(Quitter e) {
+            System.out.println(e.getMessage());
+        }
+
+
     }
 
 }
