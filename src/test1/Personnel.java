@@ -31,6 +31,11 @@ public class Personnel extends Participant {
         return numeroPersonnel;
     }
 
+    @Override
+    public String toString() {
+        return super.toString()+"| numeroPersonnel ->"+numeroPersonnel;
+    }
+
     public int getNumeroPersonnel() {
         return numeroPersonnel;
     }

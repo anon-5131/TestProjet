@@ -88,7 +88,7 @@ public class Gala implements Serializable {
      * renvoi si le type,nom et num correspont à une personne dans la table
      * lePersonnelInscrit ou lesEtudiantsInscrit
      * @param type "personnel" ou "etudiant"
-     * @param nom nom cherch"
+     * @param nom nom cherché
      * @param num numero cherché
      * @return vrai si il existe dans lePersonnelInscrit ou lesEtudiantsInscrit sinon non
      */
@@ -331,8 +331,9 @@ public class Gala implements Serializable {
     @Override
     public String toString() {
         String valeurDeRetour = "";
+        valeurDeRetour+="Contenu de \"lePersonnel\"";
         for (Personnel personnel : lePersonnel){
-            valeurDeRetour+=personnel.toString();
+            valeurDeRetour+=personnel.toString()+"\n";
         }
         for(Etudiant etudiant : lesEtudiants){
             valeurDeRetour+=etudiant.toString();
@@ -395,5 +396,22 @@ public class Gala implements Serializable {
         }
         System.out.println("Personnel introuvable avec ce numero Utilisateur");
         return null;
+    }
+
+    public void reservationAutomatique(String typeParticipant, int numeroUtilisateur, int nombreDePlace) {
+        int[] numerosLimites= recupererNumerosLimites(typeParticipant);
+        for (Table table : getLesTables()){
+            int numero = table.getNumero();// int numero = table.getNumero();
+            if (numero>=numerosLimites[0] && numero<=numerosLimites[1]){
+                if (table.getNbPlaceLibre()>=nombreDePlace){
+                    ajouterReservation(numero,nombreDePlace,getParticipant(typeParticipant,numeroUtilisateur),typeParticipant);
+                    break;
+                }
+            }
+        }
+    }
+
+    public boolean contientReservationEnAttente(Reservation reservation) {
+        return lesReservation.contains(reservation);
     }
 }

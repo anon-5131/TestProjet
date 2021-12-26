@@ -16,22 +16,27 @@ public class Ihm {
      * @return le type choisit
      */
     public String identificationType() {
-        while (true) {
+        String valeurDeRetour = "";
+        while ("".equals(valeurDeRetour)) {
             System.out.println("Choissiser quel type d'utilisateur vous êtes :\n1 - membre du Personnel\n2 - Etudiant");
             if (input.hasNext()) {
                 if (input.hasNextInt()) {
                     int reponse = input.nextInt();
                     if (reponse == 1) {
-                        return "personnel";
+                        valeurDeRetour = "personnel";
                     } else if (reponse == 2) {
-                        return "etudiant";
+                        valeurDeRetour = "etudiant";
+                    }else{
+                        System.out.println("Valeur incorrect, veuillez saisir une valeur correct");
                     }
                 }else{
                     input.next(); // cas ou l'input n'est pas un int
+                    System.out.println("Valeur incorrect, veuillez saisir une valeur correct");
                 }
-                System.out.println("Valeur incorrect, veuillez saisir une valeur correct");
+
             }
         }
+        return valeurDeRetour;
     }
 
     /**

@@ -6,23 +6,26 @@ public class Main {
 
     public static void main(String[] args) {
         LocalDate dateDuGala = null;
-        /*try {
-            dateDuGala = LocalDate.of(2022, 12, 25);
+        try{
+            dateDuGala = LocalDate.of(2022, 12,31 );
             Controleur controleur = new Controleur(dateDuGala);
-            if (!(controleur.ctlUtilisateurInscrit())) {
+            //if (!(controleur.ctlUtilisateurInscrit())) {
                 //controleur.ctlInscription();
-                controleur.ctlMenuGestionPlace();
-            }
-            controleur.ctlMenuGestionPlace();
+              //  controleur.ctlMenuGestionPlace();
+            //}
+            //controleur.ctlMenuGestionPlace();
         } catch (Quitter e) {
             System.out.println(e.getMessage());
-        }*/
+        }
+
         //Ihm ihm = new Ihm();
 
         //System.out.println(ihm.demandePlanDesTables());
         //System.out.println(ihm.choixTable("personnel"));
         //System.out.println(ihm.choixTable("etudiant"));
         //System.out.println(ihm.nbrPlace(10));
+
+            /*
         try {
             Gala gala = new Gala();
             //System.out.println("bonsoir");
@@ -34,6 +37,7 @@ public class Main {
         }catch (Exception exception){
             System.out.println(exception.getMessage());
         }
+        */
 
     }
 
