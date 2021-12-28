@@ -1,5 +1,9 @@
 package test1;
 
+import test1.model.Gala;
+import test1.model.Quitter;
+import test1.model.Reservation;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -9,7 +13,7 @@ public class Controleur {
     private Ihm ihm;
     private Gala gala;
     private String identifiantUtilisateur;
-    private String typeParticipant; // sera utiliser pour choisir quel méthode utiliser avec if (typeParticipant = "etudiant")...
+    private String typeParticipant; // sera utiliser pour choisir quel méthode utiliser avec if (typeParticipant.equals("etudiant"))...
     private String nomUtilisateur;
     private int numeroUtilisateur;
 

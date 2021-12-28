@@ -1,4 +1,4 @@
-package test1;
+package test1.model;
 
 
 import java.util.Objects;
@@ -14,16 +14,16 @@ public class Personnel extends Participant {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if(obj != null && obj instanceof Personnel){
-            return numeroPersonnel == ((Personnel)obj).numeroPersonnel;
-        }
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Personnel personnel = (Personnel) o;
+        return numeroPersonnel == personnel.numeroPersonnel;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(numeroPersonnel);
+        return Objects.hash(numeroPersonnel);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class Personnel extends Participant {
 
     @Override
     public String toString() {
-        return super.toString()+"| numeroPersonnel ->"+numeroPersonnel;
+        return super.toString() + ", numeroPersonnel='" + numeroPersonnel+'\'';
     }
 
     public int getNumeroPersonnel() {

@@ -1,5 +1,7 @@
 package test1;
 
+import test1.model.Quitter;
+
 import java.time.LocalDate;
 
 public class Main {

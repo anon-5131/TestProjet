@@ -1,4 +1,4 @@
-package test1;
+package test1.model;
 
 
 import java.util.Objects;
@@ -16,16 +16,16 @@ public class Etudiant extends Participant {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if(obj != null && obj instanceof Etudiant){
-            return numeroEtudiant == ((Etudiant)obj).numeroEtudiant;
-        }
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Etudiant etudiant = (Etudiant) o;
+        return numeroEtudiant == etudiant.numeroEtudiant;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(numeroEtudiant);
+        return Objects.hash(numeroEtudiant);
     }
 
     @Override
@@ -41,5 +41,10 @@ public class Etudiant extends Participant {
         return numeroEtudiant;
     }
 
-
+    @Override
+    public String toString() {
+        return super.toString() +
+                "anneeDeFormation=" + anneeDeFormation +
+                ", numeroEtudiant=" + numeroEtudiant;
+    }
 }

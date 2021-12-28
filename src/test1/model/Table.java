@@ -1,7 +1,8 @@
-package test1;
+package test1.model;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class Table implements Serializable {
@@ -47,6 +48,19 @@ public class Table implements Serializable {
         return valeurDeRetour;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Table table = (Table) o;
+        return numero == table.numero;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(numero);
+    }
+
     public void ajouterReservation(Reservation reservation) {
         reservationsAssociee.add(reservation);
         nbPlaceLibre-=reservation.getNbDePlace();
@@ -56,4 +70,6 @@ public class Table implements Serializable {
         reservationsAssociee.remove(reservation);
         nbPlaceLibre+=reservation.getNbDePlace();
     }
+
+
 }

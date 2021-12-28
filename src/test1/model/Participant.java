@@ -1,4 +1,4 @@
-package test1;
+package test1.model;
 
 import java.io.Serializable;
 
@@ -21,4 +21,13 @@ abstract class Participant implements Serializable {
     }
 
     abstract public int getNumero();
+
+    @Override
+    public String toString() {
+        return "nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", numeroTel='" + numeroTel + '\'' +
+                ", mail='" + mail + '\'' +
+                '}';
+    }
 }

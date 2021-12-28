@@ -1,4 +1,4 @@
-package test1;
+package test1.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -61,11 +61,11 @@ public class Reservation implements Serializable, Comparable<Reservation> {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if(obj != null && obj instanceof Reservation){
-            return possesseur.getNumero() == ((Reservation)obj).possesseur.getNumero();
-        }
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if(o == null ||  getClass() != o.getClass()) return false;
+        Reservation reservation = (Reservation) o;
+        return possesseur.getNumero() == reservation.possesseur.getNumero();
     }
 
     @Override
@@ -83,5 +83,14 @@ public class Reservation implements Serializable, Comparable<Reservation> {
                 return 0;
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return  "date=" + date +
+                ", numeroTable=" + numeroTable +
+                ", nbDePlace=" + nbDePlace +
+                ", montant=" + montant +
+                ", possesseur=" + possesseur;
     }
 }

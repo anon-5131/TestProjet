@@ -1,4 +1,4 @@
-package test1;
+package test1.model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -331,30 +331,37 @@ public class Gala implements Serializable {
     @Override
     public String toString() {
         String valeurDeRetour = "";
-        valeurDeRetour+="Contenu de \"lePersonnel\"";
+        valeurDeRetour+="Contenu de \"lePersonnel\"\n";
         for (Personnel personnel : lePersonnel){
             valeurDeRetour+=personnel.toString()+"\n";
         }
+        valeurDeRetour+="Contenu de \"lesEtudiants\"\n";
         for(Etudiant etudiant : lesEtudiants){
-            valeurDeRetour+=etudiant.toString();
+            valeurDeRetour+=etudiant.toString()+"\n";
         }
+        valeurDeRetour+="Contenu de \"lesTables\"\n";
         for(Table table : lesTables){
-            valeurDeRetour+=table.toString();
+            valeurDeRetour+=table.toString()+"\n";
         }
+        valeurDeRetour+="Contenu de \"lePersonnelInscrit\"\n";
         for (Personnel personnel : lePersonnelInscrit){
-            valeurDeRetour+=personnel.toString();
+            valeurDeRetour+=personnel.toString()+"\n";
         }
+        valeurDeRetour+="Contenu de \"lesEtudiantsInscrit\"\n";
         for(Etudiant etudiant : lesEtudiantsInscrit){
-            valeurDeRetour+=etudiant.toString();
+            valeurDeRetour+=etudiant.toString()+"\n";
         }
+        valeurDeRetour+="Contenu de \"lesReservation\"\n";
         for(Reservation reservation : lesReservation){
-            valeurDeRetour+= reservation.toString();
+            valeurDeRetour+= reservation.toString()+"\n";
         }
+        valeurDeRetour+="Contenu de \"lesReservationEnAttente\"\n";
         for(Reservation reservation : lesReservationEnAttente){
-            valeurDeRetour+= reservation.toString();
+            valeurDeRetour+= reservation.toString()+"\n";
         }
+        valeurDeRetour+="Contenu de \"fileDAttente\"\n";
         for(Reservation reservation : fileDAttente){
-            valeurDeRetour+= reservation.toString();
+            valeurDeRetour+= reservation.toString()+"\n";
         }
         return valeurDeRetour;
     }
