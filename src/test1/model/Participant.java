@@ -2,7 +2,7 @@ package test1.model;
 
 import java.io.Serializable;
 
-abstract class Participant implements Serializable {
+abstract public class Participant implements Serializable {
     protected String nom;
     protected String prenom;
     protected String numeroTel;
@@ -22,6 +22,8 @@ abstract class Participant implements Serializable {
 
     abstract public int getNumero();
 
+    abstract public boolean equals(Object o);
+
     @Override
     public String toString() {
         return "nom='" + nom + '\'' +
@@ -30,4 +32,5 @@ abstract class Participant implements Serializable {
                 ", mail='" + mail + '\'' +
                 '}';
     }
+
 }

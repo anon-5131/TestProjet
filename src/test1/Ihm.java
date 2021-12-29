@@ -1,5 +1,9 @@
 package test1;
 
+import test1.model.Etudiant;
+import test1.model.Participant;
+import test1.model.Personnel;
+
 import java.util.Scanner;
 
 public class Ihm {
@@ -96,16 +100,17 @@ public class Ihm {
 
     /**
      * Demande à l'utilisateur le numero de table choisit
-     * @param typeParticipant si etudiant personne choisit entre 1 et 10 si personnel entre 11 et 25
+     * @param utilisateur si type est un etudiant personne choisit
+     *                   entre 1 et 10 si personnel entre 11 et 25
      * @return le nombre choisit
      */
-    public int choixTable(String typeParticipant) {
+    public int choixTable(Participant utilisateur) {
         while (true) {
             System.out.println("Veuillez entrer le numéro de la table");
             if (input.hasNext()) {
                 if (input.hasNextInt()) {
                     int reponse = input.nextInt();
-                    if (typeParticipant.equals("etudiant") && reponse >0 && reponse<=10 || typeParticipant.equals("personnel") && reponse > 10 && reponse<=25) {
+                    if (utilisateur instanceof Etudiant && reponse >0 && reponse<=10 || utilisateur instanceof Personnel && reponse > 10 && reponse<=25) {
                         return reponse;
                     } else {
                         System.out.println("Erreur, veuillez choisir le bon numéro en fonction de votre type de participant");
@@ -150,6 +155,42 @@ public class Ihm {
      * Demmande à l'utilisateur si il veut confirmer ça reservation
      * @return true si oui/Oui/O/Yes/yes/y || false si non/Non/N/No/no
      */
-    //public boolean confirmationReservation() {
-    //}
+    public boolean confirmationReservation() {
+        while (true) {
+            System.out.println("Voulez vous confirmer cette reservation ?(oui/non)");
+            if (input.hasNext()) {
+                String reponse = input.next().toLowerCase();
+                if (reponse.equals("oui") || reponse.equals("o") || reponse.equals("yes") || reponse.equals("y")) {
+                    return true;
+                } else if (reponse.equals("non") || reponse.equals("n") || reponse.equals("no")) {
+                    return false;
+                }
+            }else{
+                System.out.println("Erreur, veuillez choisir 'oui' ou 'non'");
+                input.next();
+            }
+        }
+    }
+
+    public int menuGestionPlace() {
+        while (true) {
+            System.out.println("Veuiller choisir ce que vous voulez faire entre :\n" +
+                    "1 – Gérer les places du dîner\n" +
+                    "2 – Se désinscrire\n" +
+                    "3 – Quitter");
+            if (input.hasNext()) {
+                if (input.hasNextInt()) {
+                    int reponse = input.nextInt();
+                    if (reponse >= 1 && reponse <= 3) {
+                        return reponse;
+                    } else {
+                        System.out.println("Erreur, veuillez entrer un chiffre entre 1 et 3");
+                    }
+                } else {
+                    System.out.println("Erreur, veuillez entrer un chiffre entre 1 et 3");
+                    input.next();
+                }
+            }
+        }
+    }
 }

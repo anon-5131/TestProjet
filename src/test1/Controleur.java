@@ -1,8 +1,6 @@
 package test1;
 
-import test1.model.Gala;
-import test1.model.Quitter;
-import test1.model.Reservation;
+import test1.model.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,10 +10,11 @@ import java.util.Scanner;
 public class Controleur {
     private Ihm ihm;
     private Gala gala;
-    private String identifiantUtilisateur;
-    private String typeParticipant; // sera utiliser pour choisir quel méthode utiliser avec if (typeParticipant.equals("etudiant"))...
-    private String nomUtilisateur;
-    private int numeroUtilisateur;
+    //private String identifiantUtilisateur;
+    //private String typeParticipant; // sera utiliser pour choisir quel méthode utiliser avec if (typeParticipant.equals("etudiant"))...
+    //private String nomUtilisateur;
+    //private int numeroUtilisateur;
+    private Participant utilisateur;
 
     public Controleur(LocalDate dateDuGala) throws Quitter {
         // TODO mettre en place le systeme de sauvegarde et de chargement avec un try catch / scanner(new File ())
@@ -35,12 +34,12 @@ public class Controleur {
                 throw new Quitter("Fermeture du programme");
             }
         }
-
-        ihm.message(gala.toString()); // affiche l'état, les contenu des conteneurs d'objets
-        ctlIdentification(); // pour remplir les attributs identifiantUtilisateur et typeParticipant, et obligé l'utilisateur à s'identifier
         if (LocalDate.now().isAfter(dateDuGala.minusMonths(1))){
             ctlMiseAJourReservationAttente(); // après un mois fait avancer la file d'attente en fonction de la place et des désinscription
         }
+        ihm.message(gala.toString()); // affiche l'état, les contenu des conteneurs d'objets
+        ctlIdentification(); // pour remplir les attributs identifiantUtilisateur et typeParticipant, et obligé l'utilisateur à s'identifier
+
     }
 
 
@@ -59,9 +58,7 @@ public class Controleur {
             int numUtilisateurTemporaire = ihm.identificationNum();
 
             if (gala.checkIdentification(typeParticipantTemporaire, nomUtilisateurTemporaire, numUtilisateurTemporaire)) {
-                typeParticipant = typeParticipantTemporaire;
-                nomUtilisateur = nomUtilisateurTemporaire;
-                numeroUtilisateur = numUtilisateurTemporaire;
+                utilisateur = gala.getParticipant(typeParticipantTemporaire, numUtilisateurTemporaire);
                 ihm.message("Votre identification est validé");
                connecte=true;
             } else {
@@ -78,7 +75,7 @@ public class Controleur {
      * @return vrai si le participant est inscrit sinon false
      */
     public boolean ctlUtilisateurInscrit(){
-        return gala.checkInscrit(typeParticipant,nomUtilisateur,numeroUtilisateur);
+        return gala.checkInscrit(utilisateur);
     }
 
     /**
@@ -87,7 +84,7 @@ public class Controleur {
      * ou lesEtudiantsInscrit)
      */
     public void ctlInscription(){
-
+        gala.inscrire(utilisateur);
     }
 
     /**
@@ -104,9 +101,15 @@ public class Controleur {
      */
 
     public void ctlMenuGestionPlace() throws Quitter {
-        ctlReservation(2);
-        System.out.println(gala.toStringLesTables(typeParticipant));
-        ctlQuitter();
+        int choix = ihm.menuGestionPlace();
+        if(choix == 1){
+            ctlgestionPlace();
+        }else if(choix == 2){
+            ctlDesinscription();
+        }else if (choix == 3){
+            ctlQuitter();
+        }
+        // On a verifier que choix peut prendre qu'une valeur entre 1 et 3
     }
 
 
@@ -117,11 +120,11 @@ public class Controleur {
      * Désiscrit un participant dans le set de la classe Gala correspondante
      */
     public void ctlDesinscription(){
-        Reservation reservation = gala.retrouverReservation(typeParticipant,numeroUtilisateur);
+        Reservation reservation = gala.retrouverReservation(utilisateur);
         if (reservation != null){
             gala.supprimerReservation(reservation);
-            gala.desinscription(typeParticipant, numeroUtilisateur);
         }
+        gala.desinscription(utilisateur);
     }
 
 
@@ -196,16 +199,16 @@ public class Controleur {
      *
      *
      */
-/*
+
     public void ctlgestionPlace() throws Quitter {
-        Reservation reservation=gala.retrouverReservation(typeParticipant,numeroUtilisateur);
-        if ("personnel".equals(typeParticipant)){
+        Reservation reservation=gala.retrouverReservation(utilisateur);
+        if (utilisateur instanceof Personnel){
             if (reservation == null) {
                 while (true) {
                     ihm.message("Vous pouvez reserver jusqu'à 2 places");
                     if(ihm.demandePlanDesTables()) {
-                        ihm.message(gala.toStringLesTables(typeParticipant));
-                        int numTable = ihm.choixTable(typeParticipant);
+                        ihm.message(gala.toStringLesTables(utilisateur));
+                        int numTable = ihm.choixTable(utilisateur);
                         Table table = gala.retrouverTable(numTable);
                         ihm.message("vous avez choisit la table numero "+numTable+" : \n"+table); // toString de table qui montre la composition de la table choisit
                         int nombreDePlace=ihm.nbrPlace(2);
@@ -229,7 +232,7 @@ public class Controleur {
         // Si l'utilisateur est un étudiant
         }else{
             if (reservation == null) {
-                int nbrPlaceMax = gala.nbrPlaceMax(gala.getEtudiant(numeroUtilisateur));
+                int nbrPlaceMax = gala.nbrPlaceMax((Etudiant) utilisateur);
                 ihm.message("Vous pouvez reserver jusqu'à " + nbrPlaceMax + " place(s)");
                 int nombreDePlace = ihm.nbrPlace(nbrPlaceMax);
                 ctlReservation(nombreDePlace);
@@ -239,8 +242,8 @@ public class Controleur {
                         ihm.message("Vous avez demander "+reservation.getNbDePlace()+" place(s)");
                         if(ihm.confirmationReservation()){
                             if(ihm.demandePlanDesTables()) {
-                                ihm.message(gala.toStringLesTables(typeParticipant));
-                                int numTable = ihm.choixTable(typeParticipant);
+                                ihm.message(gala.toStringLesTables(utilisateur));
+                                int numTable = ihm.choixTable(utilisateur);
                                 Table table = gala.retrouverTable(numTable);
                                 ihm.message("vous avez choisit la table numero "+numTable+" : \n"+table); // toString de table qui montre la composition de la table choisit
                                 int nombreDePlace = ihm.nbrPlace(numTable);
@@ -263,11 +266,9 @@ public class Controleur {
                 ihm.message("Vous avez reservez "+reservation.getNbDePlace()+" place(s)");
             }
         }
-        ctlQuitter();
-
     }
 
- */
+
 
     /**
      * Créer une nouvelle reservation attribué automatiquement avec une table avec assez de place libre
@@ -276,7 +277,7 @@ public class Controleur {
      * @param nombreDePlace
      */
     private void ctlReservation(int nombreDePlace) {
-        gala.reservationAutomatique(typeParticipant,numeroUtilisateur,nombreDePlace);
+        gala.reservationAutomatique(utilisateur,nombreDePlace);
         // ajouter ctlReservation si date ?
     }
 
@@ -287,7 +288,7 @@ public class Controleur {
      * @param nombreDePlace nombre de table reservée
      */
     private void ctlReservation(int numTable, int nombreDePlace) {
-        gala.ajouterReservation(numTable,nombreDePlace,gala.getParticipant(typeParticipant,numeroUtilisateur),typeParticipant);
+        gala.ajouterReservation(numTable,nombreDePlace,utilisateur);
         // ajouter ctlReservation si date ?
     }
 
@@ -300,6 +301,7 @@ public class Controleur {
      * dans moins d'un mois (géréer dans le controleur)
      */
     public void ctlMiseAJourReservationAttente() {
+        System.out.println("HOURA");
         gala.miseAJourReservationAttente();
     }
 

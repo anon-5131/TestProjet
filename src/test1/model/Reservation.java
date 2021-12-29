@@ -65,19 +65,19 @@ public class Reservation implements Serializable, Comparable<Reservation> {
         if (this == o) return true;
         if(o == null ||  getClass() != o.getClass()) return false;
         Reservation reservation = (Reservation) o;
-        return possesseur.getNumero() == reservation.possesseur.getNumero();
+        return possesseur.equals(((Reservation) o).possesseur);
     }
 
     @Override
     public int compareTo(Reservation o) {
-        if (possesseur instanceof Personnel){
+        if (possesseur instanceof Personnel || o.possesseur instanceof Personnel){
             return 0;
         }else {
-            if (((Etudiant)possesseur).getAnneeDeFormation()==5 && ((Etudiant)o.getPossesseur()).getAnneeDeFormation()==5){
+            if (((Etudiant)possesseur).getAnneeDeFormation()==5 && ((Etudiant)o.possesseur).getAnneeDeFormation()==5){
                 return 0;
-            }else if(((Etudiant)possesseur).getAnneeDeFormation()==5 && ((Etudiant)o.getPossesseur()).getAnneeDeFormation()!=5){
+            }else if(((Etudiant)possesseur).getAnneeDeFormation()==5 && ((Etudiant)o.possesseur).getAnneeDeFormation()!=5){
                 return 1;
-            }else if(((Etudiant)possesseur).getAnneeDeFormation()!=5 && ((Etudiant)o.getPossesseur()).getAnneeDeFormation()==5){
+            }else if(((Etudiant)possesseur).getAnneeDeFormation()!=5 && ((Etudiant)o.possesseur).getAnneeDeFormation()==5){
                 return -1;
             }else{
                 return 0;

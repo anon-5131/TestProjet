@@ -39,22 +39,15 @@ public class Gala implements Serializable {
             } catch (FileNotFoundException e) {
             throw new Exception("Veuiller mettre le fichier etudiants.txt et personnel.txt dans à la racine du programme");
         }
-        lesTables=new ArrayList<>(); // Pas du tout sûr
+        lesTables=new ArrayList<>();
         for (int i=0; i<26;i++){
             lesTables.add(new Table());
         }
         lePersonnelInscrit=new HashSet<>(); // Pas du tout sûr
         lesEtudiantsInscrit=new HashSet<>(); // Pas du tout sûr
-        lesEtudiantsInscrit.add(new Etudiant(2165001,"MARTIN","ADAM","638412609","adam.martin@etu-ec.fr",1));
         lesReservation=new HashSet<>(); // Pas du tout sûr
-        lesReservation.add(new Reservation(15,1,new Etudiant(1234,"DUPONT","MARTIN","06","email",5)));
-
         lesReservationEnAttente=new HashSet<>(); // Pas du tout sûr
         fileDAttente = new PriorityQueue<>(); // Pas du tout sûr
-        fileDAttente.add(new Reservation(15,1,new Personnel(1111,"JOJO","John","06","email2")));
-        lesEtudiants.add(new Etudiant(2165001,"MARTIN","ADAM","638412609","adam.martin@etu-ec.fr",1)); // pour faire des test
-        lesEtudiantsInscrit.add(new Etudiant(2165001,"MARTIN","ADAM","638412609","adam.martin@etu-ec.fr",1));
-        lePersonnel.add(new Personnel(5110,"ALBERTIER","VINCENT","645202213","vincent.albertier@ec.fr"));
 
     }
 
@@ -85,60 +78,41 @@ public class Gala implements Serializable {
     }
 
     /**
-     * renvoi si le type,nom et num correspont à une personne dans la table
+     * renvoi si l'utilisateur est déjà inscrit à une personne dans la table
      * lePersonnelInscrit ou lesEtudiantsInscrit
-     * @param type "personnel" ou "etudiant"
-     * @param nom nom cherché
-     * @param num numero cherché
+     * @param utilisateur
      * @return vrai si il existe dans lePersonnelInscrit ou lesEtudiantsInscrit sinon non
      */
-    public boolean checkInscrit(String type, String nom, int num){
-        if ("personnel".equals(type)) {
-            for (Personnel personnel : lePersonnelInscrit){
-                if(personnel.getNumeroPersonnel() == num && nom.equals(personnel.getNom())){
-                    return true;
-                }
-            }
-            return false;
-        } else { // (type=="etudiant")
-            for (Etudiant etudiant : lesEtudiantsInscrit){
-                if(etudiant.getNumeroEtudiant() == num && nom.equals(etudiant.getNom())){
-                    return true;
-                }
-            }
-            return false;
+    public boolean checkInscrit(Participant utilisateur){
+        if (utilisateur instanceof Personnel) {
+            return lePersonnelInscrit.contains(utilisateur);
+        }else if (utilisateur instanceof Etudiant){
+            return lesEtudiantsInscrit.contains(utilisateur);
         }
+        return false;
     }
 
     /**
      * cherche dans tous les set correspondant si il y a une reservation au numero donné et renvoi le nom du set qui la contient sinon "aucune"
-     * @param typeUtilisateur si typeUtilisateur == Personnel cherche dans lesReservation.
-     *                        si typeUtilisateur == Etudiant cherche dans lesReservation, lesReservationEnAttente et fileDAttente.
-     * @param numeroUtilisateur numero pour savoir si le
+     * @param utilisateur l'utilisateur qui on veut retrouver sa reservation si il en possède
      * @return si dans lesReservation->"reservation" || lesReservationEnAttente->"enAttente" || fileDAttente->"fileDAttente" || si dans aucune->"aucune"
      */
-    public Reservation retrouverReservation(String typeUtilisateur,int numeroUtilisateur) {
+    public Reservation retrouverReservation(Participant utilisateur) {
 
         for (Reservation reservation : lesReservation) {
-            if (typeUtilisateur.equals("etudiant")) {
-                if (reservation.getPossesseur().getNumero() == numeroUtilisateur) {
-                    return reservation;
-                }
-            } else if (typeUtilisateur.equals("personnel")) {
-                if (reservation.getPossesseur().getNumero() == numeroUtilisateur) {
-                    return reservation;
-                }
+            if (reservation.getPossesseur().equals(utilisateur)) {
+                return reservation;
             }
         }
 
-        if (typeUtilisateur.equals("personnel")) {
+        if (utilisateur instanceof Etudiant) {
             for (Reservation reservationEnAttente : lesReservationEnAttente) {
-                if (reservationEnAttente.getPossesseur().getNumero() == numeroUtilisateur) {
+                if (reservationEnAttente.getPossesseur().equals(utilisateur)) {
                     return reservationEnAttente;
                 }
             }
             for (Reservation fileDattente : fileDAttente) {
-                if (fileDattente.getPossesseur().getNumero() == numeroUtilisateur) {
+                if (fileDattente.getPossesseur().equals(utilisateur)) {
                     return fileDattente;
                 }
             }
@@ -148,11 +122,12 @@ public class Gala implements Serializable {
 
     /**
      * retourne la composition des table en utilisant un foreach et le tostring des tables
-     * @param typeParticipant cherche soit dans les table 1 à 10 (personnel) ou 11 à 25 (etudiant)
+     * @param utilisateur en fonction de son type cherche soit dans les table
+     *                   1 à 10 (personnel) ou 11 à 25 (etudiant)
      * @return affichage composition des tables
      */
-    public String toStringLesTables(String typeParticipant) {
-        int[] numerosLimites=recupererNumerosLimites(typeParticipant);
+    public String toStringLesTables(Participant utilisateur) {
+        int[] numerosLimites=recupererNumerosLimites(utilisateur);
         String valeurDeRetour="";
         for (Table table : lesTables){
             int numero = table.getNumero();
@@ -165,12 +140,13 @@ public class Gala implements Serializable {
 
     /**
      * retourne le numero mini et numero maxi en fonction du type de participant
-     * @param typeParticipant choisis entre 1 et 10 (personnel)  et 11 et 25 (etudiant)
+     * @param utilisateur en fonction de son type
+     *                   choisis entre 1 et 10 (personnel)  et 11 et 25 (etudiant)
      * @return les nuemros limites de sorte que numeroMini=valeurDeRetour[0] numeroMaxi=valeurDeRetour[1]
      */
-    private int[] recupererNumerosLimites(String typeParticipant) {
+    private int[] recupererNumerosLimites(Participant utilisateur) {
         int[] valeurDeRetour = new int[2];
-        if ("personnel".equals(typeParticipant)){
+        if (utilisateur instanceof Personnel){
             valeurDeRetour[0]=1;
             valeurDeRetour[1]=NB_TABLES_PERS;
         }else{
@@ -186,8 +162,14 @@ public class Gala implements Serializable {
      * @param numTable numero de la table chercher
      * @return table que l'on cherche
      */
-    //public Table retrouverTable(int numTable) {
-    //}
+    public Table retrouverTable(int numTable) {
+        for (Table table : lesTables){
+            if(numTable == table.getNumero()){
+                return table;
+            }
+        }
+        return null; // n'arrive jamais parce qu'on à verifier que le nombre est compris entre les bons nombres
+    }
 
 
     /**
@@ -282,11 +264,10 @@ public class Gala implements Serializable {
      * @param numero de l'utilisateur à ajouter
      * @param nombreDePlace de place de la reservation (>1 -> accompagné)
      * @param participant utilisateur qui fait la réservation
-     * @param typeParticipant "personnel" ou "etudiant"
      */
-    public void ajouterReservation(int numero, int nombreDePlace, Participant participant, String typeParticipant){
+    public void ajouterReservation(int numero, int nombreDePlace, Participant participant){
         Reservation nouvelleReservation = new Reservation(numero,nombreDePlace,participant);
-        if ("personnel".equals(typeParticipant)){
+        if (participant instanceof Personnel){
             lesReservation.add(nouvelleReservation);
         }else{
             fileDAttente.add(nouvelleReservation);
@@ -305,7 +286,9 @@ public class Gala implements Serializable {
         int nombrePlaceAAjouter=nombrePlaceLibre-lesReservationEnAttente.size();
         if(!(fileDAttente.isEmpty())){
             for (int i=0; i<nombrePlaceAAjouter; i++){
-                lesReservationEnAttente.add(fileDAttente.poll());
+                if (!fileDAttente.isEmpty()){
+                    lesReservationEnAttente.add(fileDAttente.poll());
+                }
             }
         }
     }
@@ -317,7 +300,7 @@ public class Gala implements Serializable {
      */
     private int retrouverNombrePlacesOccupeesEtudiant() {
         int valeurDeRetour=0;
-        int[] numerosLimites = recupererNumerosLimites("etudiant");
+        int[] numerosLimites = recupererNumerosLimites(new Etudiant(0,null,null,null,null,0)); // créer un étudiant juste pour qu'on pouisse recuperer les numeros correspondant aux etudians
         for (Table table : lesTables){
             int numero = table.getNumero();
             if(numero>=numerosLimites[0] && numero<=numerosLimites[1]){
@@ -387,12 +370,12 @@ public class Gala implements Serializable {
         }
     }
 
-    public void desinscription(String typeParticipant, int numeroUtilisateur) {
-        if(typeParticipant.equals("etudiant")){
-            lesEtudiantsInscrit.remove(getEtudiant(numeroUtilisateur));
+    public void desinscription(Participant utilisateur) {
+        if(utilisateur instanceof Etudiant){
+            lesEtudiantsInscrit.remove(utilisateur);
         }
-        else if (typeParticipant.equals("personnel")){
-            lePersonnelInscrit.remove(getPersonnel(numeroUtilisateur));
+        else if (utilisateur instanceof Personnel){
+            lePersonnelInscrit.remove(utilisateur);
         }
     }
     public Personnel getPersonnel(int numeroUtilisateur) {
@@ -405,13 +388,13 @@ public class Gala implements Serializable {
         return null;
     }
 
-    public void reservationAutomatique(String typeParticipant, int numeroUtilisateur, int nombreDePlace) {
-        int[] numerosLimites= recupererNumerosLimites(typeParticipant);
+    public void reservationAutomatique(Participant utilisateur, int nombreDePlace) {
+        int[] numerosLimites= recupererNumerosLimites(utilisateur);
         for (Table table : getLesTables()){
             int numero = table.getNumero();// int numero = table.getNumero();
             if (numero>=numerosLimites[0] && numero<=numerosLimites[1]){
                 if (table.getNbPlaceLibre()>=nombreDePlace){
-                    ajouterReservation(numero,nombreDePlace,getParticipant(typeParticipant,numeroUtilisateur),typeParticipant);
+                    ajouterReservation(numero,nombreDePlace,utilisateur);
                     break;
                 }
             }
@@ -420,5 +403,13 @@ public class Gala implements Serializable {
 
     public boolean contientReservationEnAttente(Reservation reservation) {
         return lesReservation.contains(reservation);
+    }
+
+    public void inscrire(Participant utilisateur) {
+        if (utilisateur instanceof Personnel){
+            lePersonnelInscrit.add((Personnel) utilisateur);
+        }else{
+            lesEtudiantsInscrit.add((Etudiant) utilisateur);
+        }
     }
 }
