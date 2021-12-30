@@ -13,8 +13,8 @@ public class Gala implements Serializable {
     public static final int TARIF2 = 15;
     public static final int TARIF3 = 20;
     public static final int NB_PLACES_TABLE = 8;
-    public final int NB_TABLES_ETU = 15 ; // 11 à 25
-    public final int NB_TABLES_PERS = 10 ; // 1 à 10
+    public static final int NB_TABLES_ETU = 15 ; // 11 à 25
+    public static final int NB_TABLES_PERS = 10 ; // 1 à 10
     private Set<Personnel> lePersonnel;
     private Set<Etudiant> lesEtudiants;
     private List<Table> lesTables; // 0->inutiliser|personnel 1 à 10 | etudiant 11 à 25
@@ -93,9 +93,10 @@ public class Gala implements Serializable {
     }
 
     /**
-     * cherche dans tous les set correspondant si il y a une reservation au numero donné et renvoi le nom du set qui la contient sinon "aucune"
+     * cherche dans tous les set correspondant si il y a une reservation avec un
+     * possesseur egale à l'utilisateur passé en paramètre
      * @param utilisateur l'utilisateur qui on veut retrouver sa reservation si il en possède
-     * @return si dans lesReservation->"reservation" || lesReservationEnAttente->"enAttente" || fileDAttente->"fileDAttente" || si dans aucune->"aucune"
+     * @return la reservation si elle existe sinon null
      */
     public Reservation retrouverReservation(Participant utilisateur) {
 
@@ -131,7 +132,7 @@ public class Gala implements Serializable {
         String valeurDeRetour="";
         for (Table table : lesTables){
             int numero = table.getNumero();
-            if ( numero>=numerosLimites[0] && numero<=numerosLimites[1]){ // PK ça marche pas ?
+            if ( numero>=numerosLimites[0] && numero<=numerosLimites[1]){
                 valeurDeRetour+=table.toString();
             }
         }
@@ -168,75 +169,26 @@ public class Gala implements Serializable {
                 return table;
             }
         }
-        return null; // n'arrive jamais parce qu'on à verifier que le nombre est compris entre les bons nombres
+        return null; // n'arrive jamais parce qu'on à verifier que le nombre est compris entre les bons nombres dans l'ihm
     }
-
-
-    /**
-     * retrourne la reservation correspondant au numero d'utilisateur dans le Set lesReservation
-     * @param numeroUtilisateur de la personne qui possede la reservation
-     * @return la reservation correspondate
-     */
-    //public Reservation getReservationLesReservation(int numeroUtilisateur){
-      //  return null;}
-
-
-    /**
-     * retrourne la reservation correspondant au numero d'utilisateur dans la PriorityQueue fileDAttente
-     * @param numeroUtilisateur de la personne qui possede la reservation
-     * @return la reservation correspondate
-     */
-    //public Reservation getReservationFileDAttente(int numeroUtilisateur) {
-      //  return null;}
-
-
-    /**
-     * retrourne la reservation correspondant au numero d'utilisateur dans le Set lesReservationEnAttente
-     * @param numeroUtilisateur de la personne qui possede la reservation
-     * @return la reservation correspondate
-     */
-    //public Reservation getReservationEnAttente(int numeroUtilisateur) {
-      //  return null;}
-
-
-    /**
-     * Retourne l'étudiant qui possede le numeroUtilisateur comme numero d'étudiant
-     * dans le set lesEtudiants
-     * @param numeroUtilisateur numero qu'on cherche
-     * @return etudiant rechercher
-     */
-    public Etudiant getEtudiant(int numeroUtilisateur) {
-        for (Etudiant etudiant : lesEtudiants){
-            if (etudiant.getNumeroEtudiant() == numeroUtilisateur){
-                return etudiant;
-            }
-        }
-        System.out.println("Etudiant introuvable avec ce numero Utilisateur");
-        return null;
-    }
-
 
     /**
      * Retourne le nombre de place maximum qu'un étudiant peut reserver en fonction
      * de ses années de formation
      * // @param etudiant etudiant dont on veut savoir le nombre max de place qui peut
      *                 reserver
-     * @return 3 si 5ème années sinon 2
+     * @return 4 si 5ème années sinon 2
      */
     public int nbrPlaceMax(Etudiant etudiant) {
         if(etudiant.getAnneeDeFormation()==5){
-            return 3;
+            return 4;
         }else{
             return 2;
         }
     }
 
-    public List<Table> getLesTables() {
-        return lesTables;
-    }
-
     /**
-     * retourn le participant en fonction de son numero et son type
+     * retourne le participant en fonction de son numero et son type
      * @param typeParticipant cherché
      * @param numeroUtilisateur cherché
      * @return participant cherché
@@ -255,13 +207,13 @@ public class Gala implements Serializable {
                 }
             }
         }
-        return null; // comment on fait ?
+        return null; // n'arrive jamais parce qu'on à déjà vérifier si il existait avec checkIdentification
     }
 
     /**
      * Créer une nouvelle reservation et l'associe à lesReservation (personnel) ou
      * fileDAttente (etudiant) et associe cette reservation à la table passée en paramètre
-     * @param numero de l'utilisateur à ajouter
+     * @param numero de la table correspondant à cette reservation
      * @param nombreDePlace de place de la reservation (>1 -> accompagné)
      * @param participant utilisateur qui fait la réservation
      */
@@ -300,7 +252,7 @@ public class Gala implements Serializable {
      */
     private int retrouverNombrePlacesOccupeesEtudiant() {
         int valeurDeRetour=0;
-        int[] numerosLimites = recupererNumerosLimites(new Etudiant(0,null,null,null,null,0)); // créer un étudiant juste pour qu'on pouisse recuperer les numeros correspondant aux etudians
+        int[] numerosLimites = recupererNumerosLimites(new Etudiant(0,null,null,null,null,0)); // créer un étudiant juste pour qu'on puisse recuperer les numeros correspondant aux etudiants
         for (Table table : lesTables){
             int numero = table.getNumero();
             if(numero>=numerosLimites[0] && numero<=numerosLimites[1]){
@@ -311,6 +263,11 @@ public class Gala implements Serializable {
     }
 
 
+    /**
+     * Créer un string du contenu de toutes les conteneurs en utilisant toString
+     * de tous les éléments
+     * @return contenu des conteneurs
+     */
     @Override
     public String toString() {
         String valeurDeRetour = "";
@@ -349,27 +306,45 @@ public class Gala implements Serializable {
         return valeurDeRetour;
     }
 
-    public void supprimerReservation(Reservation reservation) {
-        for (Reservation lesReservation : lesReservation) {
-            if (lesReservation.equals(reservation)) {
-                this.lesReservation.remove(reservation);
+    public void supprimerReservation(Participant utilisateur) {
+        boolean supprimee = false;
+        for (Reservation reservation : lesReservation) {
+            if (reservation.getPossesseur().equals(utilisateur)) {
+                lesReservation.remove(reservation);
                 lesTables.get(reservation.getNumeroTable()).supprimerReservation(reservation);
+                supprimee=true;
+                break;
             }
         }
-        for (Reservation reservationEnAttente : lesReservationEnAttente) {
-            if (reservationEnAttente.equals(reservation)) {
-                this.lesReservationEnAttente.remove(reservation);
-                lesTables.get(reservation.getNumeroTable()).supprimerReservation(reservation);
+        if (utilisateur instanceof Etudiant){
+            if (!supprimee){
+                for (Reservation reservationEnAttente : lesReservationEnAttente) {
+                    if (reservationEnAttente.getPossesseur().equals(utilisateur)) {
+                        lesReservationEnAttente.remove(reservationEnAttente);
+                        lesTables.get(reservationEnAttente.getNumeroTable()).supprimerReservation(reservationEnAttente);
+                        supprimee=true;
+                        break;
+                    }
+                }
             }
-        }
-        for (Reservation fileDattente : fileDAttente) {
-            if (fileDattente.equals(reservation)) {
-                this.fileDAttente.remove(reservation);
-                lesTables.get(reservation.getNumeroTable()).supprimerReservation(reservation);
+            if(!supprimee){
+                for (Reservation reservationFileDattente : fileDAttente) {
+                    if (reservationFileDattente.getPossesseur().equals(utilisateur)) {
+                        fileDAttente.remove(reservationFileDattente);
+                        lesTables.get(reservationFileDattente.getNumeroTable()).supprimerReservation(reservationFileDattente);
+                        supprimee=true;
+                        break;
+                    }
+                }
             }
         }
     }
 
+    /**
+     * Supprime de lesEtudiantsInscrits ou lePersonnelInscrit
+     * l'utilisateur passé en paramètre
+     * @param utilisateur que l'on veut supprimer des inscrits
+     */
     public void desinscription(Participant utilisateur) {
         if(utilisateur instanceof Etudiant){
             lesEtudiantsInscrit.remove(utilisateur);
@@ -378,33 +353,47 @@ public class Gala implements Serializable {
             lePersonnelInscrit.remove(utilisateur);
         }
     }
-    public Personnel getPersonnel(int numeroUtilisateur) {
-        for (Personnel personnel : lePersonnel){
-            if (personnel.getNumeroPersonnel() == numeroUtilisateur){
-                return personnel;
-            }
-        }
-        System.out.println("Personnel introuvable avec ce numero Utilisateur");
-        return null;
-    }
 
-    public void reservationAutomatique(Participant utilisateur, int nombreDePlace) {
+    /**
+     * Test pour chaque table si il y a asser de place et s'il y en a assez
+     * créer une nouvelle reservation à cette table
+     * @param utilisateur
+     * @param nombreDePlace
+     * @throws Exception
+     */
+    public void reservationAutomatique(Participant utilisateur, int nombreDePlace) throws Exception {
+        boolean ajoutEffectuer=false;
         int[] numerosLimites= recupererNumerosLimites(utilisateur);
-        for (Table table : getLesTables()){
+        for (Table table : lesTables){
             int numero = table.getNumero();// int numero = table.getNumero();
             if (numero>=numerosLimites[0] && numero<=numerosLimites[1]){
                 if (table.getNbPlaceLibre()>=nombreDePlace){
                     ajouterReservation(numero,nombreDePlace,utilisateur);
+                    ajoutEffectuer=true;
                     break;
                 }
             }
         }
+        if(!ajoutEffectuer){
+            throw new Exception("Echec de la création de la reservation :\nPlus assez de place dans les tables pour le nombre de places demandé");
+        }
     }
 
+    /**
+     * retourne vrai si la reservation passée en paramètre est contenu dans lesReservationEnAttente
+     * sinon renvoi faux
+     * @param reservation que l'on veut tester
+     * @return true si la reservation est dans lesReservationEnAttente
+     */
     public boolean contientReservationEnAttente(Reservation reservation) {
-        return lesReservation.contains(reservation);
+        return lesReservationEnAttente.contains(reservation);
     }
 
+
+    /**
+     * Inscrit le participant (en le mettant dans lesEtudiantsInscrit ou lePersonnelInscrit)
+     * @param utilisateur à inscrire
+     */
     public void inscrire(Participant utilisateur) {
         if (utilisateur instanceof Personnel){
             lePersonnelInscrit.add((Personnel) utilisateur);

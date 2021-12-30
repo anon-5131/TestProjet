@@ -10,17 +10,12 @@ import java.util.Scanner;
 public class Controleur {
     private Ihm ihm;
     private Gala gala;
-    //private String identifiantUtilisateur;
-    //private String typeParticipant; // sera utiliser pour choisir quel méthode utiliser avec if (typeParticipant.equals("etudiant"))...
-    //private String nomUtilisateur;
-    //private int numeroUtilisateur;
     private Participant utilisateur;
 
     public Controleur(LocalDate dateDuGala) throws Quitter {
-        // TODO mettre en place le systeme de sauvegarde et de chargement avec un try catch / scanner(new File ())
         ihm = new Ihm();
         try{
-            Scanner scanner =new Scanner(new File("gala.ser")); // regarder si le fichier gala.ser existe
+            Scanner scanner =new Scanner(new File("gala.ser")); // regarder si le fichier gala.ser existe si non --> catch
             ServiceStockage serviceStockage = new ServiceStockage();
             gala=(Gala)serviceStockage.charger();
             System.out.println("bonjour");
@@ -45,10 +40,8 @@ public class Controleur {
 
     /**
      * Utilise la méthode identification de l'ihm pour récuperer
-     * l'identifiant de l'utilisateur qui veux s'inscire et rempli
-     * les attributs identifiantUtilisateur et typeParticipant
-     *
-     * Utilisation d'un try cath pour redemander si l'identification est fausse
+     * l'identifiant de l'utilisateur qui veux s'inscire
+     * affecte la bonne valeur a l'attribut utilisateur
      */
     public void ctlIdentification (){
         boolean connecte = false;
@@ -70,7 +63,7 @@ public class Controleur {
 
     /**
      * Permet de savoir si un utilisateur est déjà inscrit grâce au set de la classe
-     * Gala (lePersonnelInscrit et lesEtudiantsInscrit
+     * Gala (lePersonnelInscrit et lesEtudiantsInscrit)
      * Attention à séparer deux méthodes ou parties entre les etudiant et le personnel
      * @return vrai si le participant est inscrit sinon false
      */
@@ -109,30 +102,28 @@ public class Controleur {
         }else if (choix == 3){
             ctlQuitter();
         }
-        // On a verifier que choix peut prendre qu'une valeur entre 1 et 3
+        // On a verifier que choix peut prendre qu'une valeur entre 1 et 3 dans ihm.menuGestionPlace();
     }
 
 
     /**
      * Supprime toutes les demandes de reservation et ou les reservation
-     * qui le concerne  puis, (utilise atribut numero étudiant)
-     * (utilise java.getReservation...() en fonction etudiant ou personnel)
-     * Désiscrit un participant dans le set de la classe Gala correspondante
+     * qui le concerne  puis, désinscrit un participant dans le set de la classe Gala correspondante
+     * @throws Quitter quitte après être désinscrit
      */
-    public void ctlDesinscription(){
-        Reservation reservation = gala.retrouverReservation(utilisateur);
-        if (reservation != null){
-            gala.supprimerReservation(reservation);
-        }
+    public void ctlDesinscription() throws Quitter {
+        gala.supprimerReservation(utilisateur);
         gala.desinscription(utilisateur);
+        ihm.message("Vous vous êtes bien desinscrit");
+        ctlQuitter(); // quitte pour que l'utilisateur ne puisse pas reserver une table alors qu'il n'est plus inscrit
     }
 
 
 
 
     /**
-     * quitte l'application (je sais pas comment faire)
-     *
+     * Sauvegarde le gale puis lance l'exeption Quitter pour arreter l'application
+     * @throws Quitter une exeption que l'on catch dans le main pour arreter l'application
      */
     public void ctlQuitter() throws Quitter {
         try {
@@ -212,8 +203,8 @@ public class Controleur {
                         Table table = gala.retrouverTable(numTable);
                         ihm.message("vous avez choisit la table numero "+numTable+" : \n"+table); // toString de table qui montre la composition de la table choisit
                         int nombreDePlace=ihm.nbrPlace(2);
-                        if(table.getNbPlaceLibre() <= nombreDePlace){
-                            ctlReservation(numTable,nombreDePlace); // penser à faire distinction etudiant et personnel
+                        if(nombreDePlace <= table.getNbPlaceLibre()){
+                            ctlReservation(numTable,nombreDePlace);
                             break;
                         }else{
                             ihm.message("vous avez demander un nombre de place invalide");
@@ -221,7 +212,7 @@ public class Controleur {
 
                     }else{
                         int nombreDePlace = ihm.nbrPlace(2);
-                        ctlReservation(nombreDePlace);// attention surcharge de méthode
+                        ctlReservation(nombreDePlace);
                         break;
                     }
                 }
@@ -248,12 +239,12 @@ public class Controleur {
                                 ihm.message("vous avez choisit la table numero "+numTable+" : \n"+table); // toString de table qui montre la composition de la table choisit
                                 int nombreDePlace = ihm.nbrPlace(numTable);
                                 if (table.getNbPlaceLibre() <= nombreDePlace) {
-                                    ctlReservation(numTable, nombreDePlace); // penser à faire distinction etudiant et personnel
+                                    ctlReservation(numTable, nombreDePlace);
                                     break;
                                 }
                             }else{
                                 int nombreDePlace = ihm.nbrPlace(reservation.getNbDePlace());
-                                ctlReservation(nombreDePlace);// attention surcharge de méthode
+                                ctlReservation(nombreDePlace);
                                 break;
                             }
 
@@ -263,7 +254,7 @@ public class Controleur {
                         }
                     }
                 }
-                ihm.message("Vous avez reservez "+reservation.getNbDePlace()+" place(s)");
+                ihm.message("Vous avez reservez déjà "+reservation.getNbDePlace()+" place(s)");
             }
         }
     }
@@ -275,10 +266,15 @@ public class Controleur {
      * attention a distingué etudiant et personnel pour savoir où est créer la reservation et
      * où chercher une table avec assez de places libre
      * @param nombreDePlace
+     * @throws Quitter renvoie une exeption si une erreur dans la création de la réservation est arrivé et que l'utilisateur quitte
      */
-    private void ctlReservation(int nombreDePlace) {
-        gala.reservationAutomatique(utilisateur,nombreDePlace);
-        // ajouter ctlReservation si date ?
+    private void ctlReservation(int nombreDePlace) throws Quitter {
+        try {
+            gala.reservationAutomatique(utilisateur,nombreDePlace);
+        } catch (Exception e) {
+            ihm.message(e.getMessage());
+            ctlMenuGestionPlace();
+        }
     }
 
     /**
@@ -289,7 +285,6 @@ public class Controleur {
      */
     private void ctlReservation(int numTable, int nombreDePlace) {
         gala.ajouterReservation(numTable,nombreDePlace,utilisateur);
-        // ajouter ctlReservation si date ?
     }
 
 
@@ -301,7 +296,6 @@ public class Controleur {
      * dans moins d'un mois (géréer dans le controleur)
      */
     public void ctlMiseAJourReservationAttente() {
-        System.out.println("HOURA");
         gala.miseAJourReservationAttente();
     }
 

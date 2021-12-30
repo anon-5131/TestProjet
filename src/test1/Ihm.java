@@ -1,6 +1,7 @@
 package test1;
 
 import test1.model.Etudiant;
+import test1.model.Gala;
 import test1.model.Participant;
 import test1.model.Personnel;
 
@@ -110,7 +111,7 @@ public class Ihm {
             if (input.hasNext()) {
                 if (input.hasNextInt()) {
                     int reponse = input.nextInt();
-                    if (utilisateur instanceof Etudiant && reponse >0 && reponse<=10 || utilisateur instanceof Personnel && reponse > 10 && reponse<=25) {
+                    if (utilisateur instanceof Personnel && reponse >0 && reponse<= Gala.NB_TABLES_PERS || utilisateur instanceof Etudiant && reponse > Gala.NB_TABLES_PERS && reponse<=Gala.NB_TABLES_PERS+Gala.NB_TABLES_ETU) {
                         return reponse;
                     } else {
                         System.out.println("Erreur, veuillez choisir le bon numéro en fonction de votre type de participant");
@@ -172,6 +173,16 @@ public class Ihm {
         }
     }
 
+
+    /**
+     * propose un menu :
+     * 1 – Gérer les places du dîner
+     * 2 – Se désinscrire
+     * 3 – Quitter
+     * et renvoi le chiffre choisit par l'utilisateur, si l'utilisateur
+     * choisit un chiffre en dehors de 1 à 3 on lui redemande
+     * @return le chiffre choisit par l'utilisateur
+     */
     public int menuGestionPlace() {
         while (true) {
             System.out.println("Veuiller choisir ce que vous voulez faire entre :\n" +

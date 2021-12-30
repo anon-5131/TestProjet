@@ -65,7 +65,7 @@ public class Reservation implements Serializable, Comparable<Reservation> {
         if (this == o) return true;
         if(o == null ||  getClass() != o.getClass()) return false;
         Reservation reservation = (Reservation) o;
-        return possesseur.equals(((Reservation) o).possesseur);
+        return possesseur.equals(reservation.possesseur);
     }
 
     @Override

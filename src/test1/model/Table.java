@@ -28,8 +28,10 @@ public class Table implements Serializable {
     }
 
     /**
-     * retourne la composition (les noms) de la tables
-     * @return
+     * retourne la composition (les noms) de la tables et ajoute si
+     * la personne est accompagné où non et indique le nombre
+     * de place libre (en contant le nombre de ligne)
+     * @return composition de la table
      */
     @Override
     public String toString() {
@@ -61,11 +63,22 @@ public class Table implements Serializable {
         return Objects.hash(numero);
     }
 
+
+    /**
+     * ajoute une nouvelle resservation au set de la liste et change
+     * le nombre de place libre en consequence
+     * @param reservation la reservation que l'on veut ajouter
+     */
     public void ajouterReservation(Reservation reservation) {
         reservationsAssociee.add(reservation);
         nbPlaceLibre-=reservation.getNbDePlace();
     }
 
+    /**
+     * supprimer la reservation passé en paramètre et change le nombre
+     * de place libre en consequence
+     * @param reservation que l'on veut supprimer de la table
+     */
     public void supprimerReservation(Reservation reservation) {
         reservationsAssociee.remove(reservation);
         nbPlaceLibre+=reservation.getNbDePlace();

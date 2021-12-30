@@ -20,6 +20,11 @@ abstract public class Participant implements Serializable {
         return nom;
     }
 
+    /**
+     * renvoi le numeroEtudiant ou le numeroPersonnel en fonction
+     * dans quel sous-classe on est
+     * @return le numero qui definit l'utilisateur (numeroPersonnel ou numeroEtudiant)
+     */
     abstract public int getNumero();
 
     abstract public boolean equals(Object o);
