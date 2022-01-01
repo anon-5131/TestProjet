@@ -204,4 +204,30 @@ public class Ihm {
             }
         }
     }
+
+    /**
+     * Demmande à l'utilisateur si il veut s'inscrire ou quitter
+     * @return 1(s'inscrire) ou 2(Quitter)
+     */
+
+    public int demandeInscription() {
+        while (true) {
+            System.out.println("Vous n'êtes pas inscrit\n" +
+                    "1 – m'inscrire\n" +
+                    "2 – Quitter");
+            if (input.hasNext()) {
+                if (input.hasNextInt()) {
+                    int reponse = input.nextInt();
+                    if (reponse >= 1 && reponse <= 2) {
+                        return reponse;
+                    } else {
+                        System.out.println("Erreur, veuillez entrer un chiffre entre 1 et 2");
+                    }
+                } else {
+                    System.out.println("Erreur, veuillez entrer un chiffre entre 1 et 2");
+                    input.next();
+                }
+            }
+        }
+    }
 }

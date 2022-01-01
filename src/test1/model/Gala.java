@@ -17,7 +17,7 @@ public class Gala implements Serializable {
     public static final int NB_TABLES_PERS = 10 ; // 1 à 10
     private Set<Personnel> lePersonnel;
     private Set<Etudiant> lesEtudiants;
-    private List<Table> lesTables; // personnel 1 à 10 | etudiant 11 à 25
+    private List<Table> lesTables; // 0 --> etudiant non validié | personnel 1 à 10 | etudiant 11 à 25
     private Set<Personnel> lePersonnelInscrit;
     private Set<Etudiant> lesEtudiantsInscrit;
     private Set<Reservation> lesReservation; // si dans ce set --> place reservé
@@ -40,15 +40,14 @@ public class Gala implements Serializable {
             throw new Exception("Veuiller mettre le fichier etudiants.txt et personnel.txt dans à la racine du programme");
         }
         lesTables=new ArrayList<>();
-        for (int i=1; i<=NB_TABLES_PERS+NB_TABLES_ETU;i++){
-            Table table = new Table();
-            lesTables.add(table.getNumero(),table);
+        for (int i=0; i<=NB_TABLES_PERS+NB_TABLES_ETU;i++){
+            lesTables.add(new Table());
         }
-        lePersonnelInscrit=new HashSet<>(); // Pas du tout sûr
-        lesEtudiantsInscrit=new HashSet<>(); // Pas du tout sûr
-        lesReservation=new HashSet<>(); // Pas du tout sûr
-        lesReservationEnAttente=new HashSet<>(); // Pas du tout sûr
-        fileDAttente = new PriorityQueue<>(); // Pas du tout sûr
+        lePersonnelInscrit=new HashSet<>();
+        lesEtudiantsInscrit=new HashSet<>();
+        lesReservation=new HashSet<>();
+        lesReservationEnAttente=new HashSet<>();
+        fileDAttente = new PriorityQueue<>();
 
     }
 
@@ -212,19 +211,18 @@ public class Gala implements Serializable {
     }
 
     /**
-     * Créer une nouvelle reservation et l'associe à lesReservation (personnel) ou
-     * fileDAttente (etudiant) et associe cette reservation à la table passée en paramètre
+     * Créer une nouvelle reservation et l'associe à lesReservation
+     * et associe cette reservation à la table passée en paramètre
      * @param numero de la table correspondant à cette reservation
      * @param nombreDePlace de place de la reservation (>1 -> accompagné)
      * @param participant utilisateur qui fait la réservation
      */
     public void ajouterReservation(int numero, int nombreDePlace, Participant participant){
         Reservation nouvelleReservation = new Reservation(numero,nombreDePlace,participant);
-        if (participant instanceof Personnel){
-            lesReservation.add(nouvelleReservation);
-        }else{
-            fileDAttente.add(nouvelleReservation);
+        if (participant instanceof Etudiant) {
+            lesReservationEnAttente.remove(nouvelleReservation);
         }
+        lesReservation.add(nouvelleReservation);
         lesTables.get(numero).ajouterReservation(nouvelleReservation);
     }
 
@@ -307,6 +305,11 @@ public class Gala implements Serializable {
         return valeurDeRetour;
     }
 
+    /**
+     * Supprime toutes la reservation qui appartient à l'utilisateur dans toutes les conteneurs qui le concerne
+     * si l'utilisateur n'a aucune reservation, ne fait rien.
+     * @param utilisateur l'utilisateur qui possede la reservation
+     */
     public void supprimerReservation(Participant utilisateur) {
         boolean supprimee = false;
         for (Reservation reservation : lesReservation) {
@@ -401,5 +404,15 @@ public class Gala implements Serializable {
         }else{
             lesEtudiantsInscrit.add((Etudiant) utilisateur);
         }
+    }
+
+    /**
+     * Créer une nouvelle reservation sans numero de table
+     * @param nombreDePlace
+     */
+    public void reservationEtudiant(int nombreDePlace, Participant participant) {
+        Reservation nouvelleReservation = new Reservation(0,nombreDePlace, participant);
+        fileDAttente.add(nouvelleReservation);
+        lesTables.get(0).ajouterReservation(nouvelleReservation);
     }
 }

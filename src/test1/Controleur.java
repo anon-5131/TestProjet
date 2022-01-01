@@ -18,12 +18,10 @@ public class Controleur {
             Scanner scanner =new Scanner(new File("gala.ser")); // regarder si le fichier gala.ser existe si non --> catch
             ServiceStockage serviceStockage = new ServiceStockage();
             gala=(Gala)serviceStockage.charger();
-            System.out.println("bonjour");
         }catch(IOException | ClassNotFoundException e ){
             System.out.println(e.getMessage());
             try {
                 gala = new Gala();
-                System.out.println("bonsoir");
             }catch (Exception exception){
                 ihm.message(exception.getMessage());
                 throw new Quitter("Fermeture du programme");
@@ -72,12 +70,22 @@ public class Controleur {
     }
 
     /**
+     * Demande si l'utilisateur veut s'inscrire ou quitter
+     * si il veut s'inscrire
      * Inscrit un participant dans le set de la classe Gala correspondante (on a
      * deja tester si il était présent grace à ctlUtilisateurInscrit) (lePersonelInscrit
      * ou lesEtudiantsInscrit)
+     * sinon appele la fonction ctlQuitter pour quitter l'application
+     * @throws Quitter permet de quitter l'application
      */
-    public void ctlInscription(){
-        gala.inscrire(utilisateur);
+    public void ctlInscription() throws Quitter {
+        int choix=ihm.demandeInscription();
+        if (choix == 1){
+            gala.inscrire(utilisateur);
+        }else{
+            ctlQuitter();
+        }
+
     }
 
     /**
@@ -201,11 +209,12 @@ public class Controleur {
                         ihm.message(gala.toStringLesTables(utilisateur));
                         int numTable = ihm.choixTable(utilisateur);
                         Table table = gala.retrouverTable(numTable);
-                        ihm.message("vous avez choisit la table numero "+numTable+" : \n"+table); // toString de table qui montre la composition de la table choisit
+                        ihm.message(table.toString()); // toString de table qui montre la composition de la table choisit
                         int nombreDePlace=ihm.nbrPlace(2);
                         if(nombreDePlace <= table.getNbPlaceLibre()){
                             ctlReservation(numTable,nombreDePlace);
-                            break;
+                            ihm.message("Votre demende de reservation à bien été prise en compte");
+                            ctlQuitter();
                         }else{
                             ihm.message("vous avez demander un nombre de place invalide");
                         }
@@ -213,7 +222,8 @@ public class Controleur {
                     }else{
                         int nombreDePlace = ihm.nbrPlace(2);
                         ctlReservation(nombreDePlace);
-                        break;
+                        ihm.message("Votre demende de reservation à bien été prise en compte");
+                        ctlQuitter();
                     }
                 }
             }// Si l'utilisateur est un membre du personnel et n'a pas de reservation
@@ -226,7 +236,7 @@ public class Controleur {
                 int nbrPlaceMax = gala.nbrPlaceMax((Etudiant) utilisateur);
                 ihm.message("Vous pouvez reserver jusqu'à " + nbrPlaceMax + " place(s)");
                 int nombreDePlace = ihm.nbrPlace(nbrPlaceMax);
-                ctlReservation(nombreDePlace);
+                ctlReservationEtudiant(nombreDePlace);
             }else{
                 if(gala.contientReservationEnAttente(reservation)){
                     while (true){
@@ -236,16 +246,18 @@ public class Controleur {
                                 ihm.message(gala.toStringLesTables(utilisateur));
                                 int numTable = ihm.choixTable(utilisateur);
                                 Table table = gala.retrouverTable(numTable);
-                                ihm.message("vous avez choisit la table numero "+numTable+" : \n"+table); // toString de table qui montre la composition de la table choisit
-                                int nombreDePlace = ihm.nbrPlace(numTable);
-                                if (table.getNbPlaceLibre() <= nombreDePlace) {
-                                    ctlReservation(numTable, nombreDePlace);
-                                    break;
+                                ihm.message(table.toString()); // toString de table qui montre la composition de la table choisit
+                                if (table.getNbPlaceLibre() >= reservation.getNbDePlace()) {
+                                    ctlReservation(numTable, reservation.getNbDePlace());
+                                    ihm.message("Votre demende de reservation à bien été prise en compte");
+                                    ctlQuitter();
+                                }else{
+                                    ihm.message("Erreur la table demandé n'a pas assez de places pour votre reservation de "+reservation.getNbDePlace()+" place(s)");
                                 }
                             }else{
-                                int nombreDePlace = ihm.nbrPlace(reservation.getNbDePlace());
-                                ctlReservation(nombreDePlace);
-                                break;
+                                ctlReservation(reservation.getNbDePlace());
+                                ihm.message("Votre demende de reservation à bien été prise en compte");
+                                ctlQuitter();
                             }
 
                         }else{
@@ -254,18 +266,25 @@ public class Controleur {
                         }
                     }
                 }
-                ihm.message("Vous avez reservez déjà "+reservation.getNbDePlace()+" place(s)");
+                ihm.message("Vous avez fait une demande de reservation de "+reservation.getNbDePlace()+" place(s)");
             }
         }
     }
 
+    /**
+     * Créer une reservation sans numero de tables
+     * @param nombreDePlace nombre de place dans la reservation
+     */
+    private void ctlReservationEtudiant(int nombreDePlace) {
+        gala.reservationEtudiant(nombreDePlace,utilisateur);
+    }
 
 
     /**
      * Créer une nouvelle reservation attribué automatiquement avec une table avec assez de place libre
      * attention a distingué etudiant et personnel pour savoir où est créer la reservation et
      * où chercher une table avec assez de places libre
-     * @param nombreDePlace
+     * @param nombreDePlace nombre de palce de la reservation
      * @throws Quitter renvoie une exeption si une erreur dans la création de la réservation est arrivé et que l'utilisateur quitte
      */
     private void ctlReservation(int nombreDePlace) throws Quitter {
