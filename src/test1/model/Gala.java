@@ -17,7 +17,7 @@ public class Gala implements Serializable {
     public static final int NB_TABLES_PERS = 10 ; // 1 à 10
     private Set<Personnel> lePersonnel;
     private Set<Etudiant> lesEtudiants;
-    private List<Table> lesTables; // 0->inutiliser|personnel 1 à 10 | etudiant 11 à 25
+    private List<Table> lesTables; // personnel 1 à 10 | etudiant 11 à 25
     private Set<Personnel> lePersonnelInscrit;
     private Set<Etudiant> lesEtudiantsInscrit;
     private Set<Reservation> lesReservation; // si dans ce set --> place reservé
@@ -40,8 +40,9 @@ public class Gala implements Serializable {
             throw new Exception("Veuiller mettre le fichier etudiants.txt et personnel.txt dans à la racine du programme");
         }
         lesTables=new ArrayList<>();
-        for (int i=0; i<26;i++){
-            lesTables.add(new Table());
+        for (int i=1; i<=NB_TABLES_PERS+NB_TABLES_ETU;i++){
+            Table table = new Table();
+            lesTables.add(table.getNumero(),table);
         }
         lePersonnelInscrit=new HashSet<>(); // Pas du tout sûr
         lesEtudiantsInscrit=new HashSet<>(); // Pas du tout sûr

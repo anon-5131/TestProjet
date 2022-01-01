@@ -12,7 +12,6 @@ public class Table implements Serializable {
     private static int numeroSuivant=0;
 
     public Table (){
-        numero=numeroSuivant++;
         nbPlaceLibre=Gala.NB_PLACES_TABLE;
         reservationsAssociee = new HashSet<>();
 
