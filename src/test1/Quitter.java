@@ -1,4 +1,4 @@
-package test1.model;
+package test1;
 
 public class Quitter extends Throwable {
     public Quitter(String message) {

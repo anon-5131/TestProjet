@@ -1,10 +1,5 @@
 package test1;
 
-import test1.model.Etudiant;
-import test1.model.Gala;
-import test1.model.Participant;
-import test1.model.Personnel;
-
 import java.util.Scanner;
 
 public class Ihm {
