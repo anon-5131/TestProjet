@@ -17,7 +17,6 @@ public class Controleur {
             ServiceStockage serviceStockage = new ServiceStockage();
             gala=(Gala)serviceStockage.charger();
         }catch(IOException | ClassNotFoundException e ){
-            System.out.println(e.getMessage());
             try {
                 gala = new Gala();
             }catch (Exception exception){
