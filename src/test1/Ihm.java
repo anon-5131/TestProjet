@@ -45,15 +45,6 @@ public class Ihm {
     }
 
     /**
-     * Demande à l'utilisateur son nom et le retourne
-     * @return nom demander à l'utilisateur
-     */
-    public String identificationNom() {
-        System.out.println("Entrer votre nom");
-        return input.next();
-    }
-
-    /**
      * Demande à l'utilisateur son numéro et le retourne (int uniquement)
      * @return numero demander à l'utilisateur
      */

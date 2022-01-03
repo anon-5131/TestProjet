@@ -74,13 +74,13 @@ public class Reservation implements Serializable, Comparable<Reservation> {
             return 0;
         }else {
             if (((Etudiant)possesseur).getAnneeDeFormation()==5 && ((Etudiant)o.possesseur).getAnneeDeFormation()==5){
-                return date.compareTo(o.date);
+                return -date.compareTo(o.date);
             }else if(((Etudiant)possesseur).getAnneeDeFormation()==5 && ((Etudiant)o.possesseur).getAnneeDeFormation()!=5){
-                return 1;
-            }else if(((Etudiant)possesseur).getAnneeDeFormation()!=5 && ((Etudiant)o.possesseur).getAnneeDeFormation()==5){
                 return -1;
+            }else if(((Etudiant)possesseur).getAnneeDeFormation()!=5 && ((Etudiant)o.possesseur).getAnneeDeFormation()==5){
+                return 1;
             }else{
-                return date.compareTo(o.date);
+                return -date.compareTo(o.date);
             }
         }
     }

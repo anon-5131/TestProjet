@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         LocalDate dateDuGala = null;
         try{
-            dateDuGala = LocalDate.of(2021, 12,31 );
+            dateDuGala = LocalDate.of(2022, 2,15 );
             Controleur controleur = new Controleur(dateDuGala);
             if (!(controleur.ctlUtilisateurInscrit())) {
                 controleur.ctlInscription();
@@ -23,7 +23,5 @@ public class Main {
     }
 
 }
-
-
 
 

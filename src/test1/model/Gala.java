@@ -55,21 +55,20 @@ public class Gala implements Serializable {
      * renvoi si le type,nom et num correspont à une personne dans la table
      * lePersonnel ou lesEtudiants
      * @param type "personnel" ou "etudiant"
-     * @param nom nom cherch"
      * @param num numero cherché
      * @return vrai si il existe dans lePersonnel ou lesEtudiants sinon non
      */
-    public boolean checkIdentification(String type, String nom, int num) {
+    public boolean checkIdentification(String type, int num) {
         if ("personnel".equals(type)) {
             for (Personnel personnel : lePersonnel){
-                if(personnel.getNumeroPersonnel() == num && nom.equals(personnel.getNom())){
+                if(personnel.getNumeroPersonnel() == num ){
                     return true;
                 }
             }
             return false;
         } else { // ("etudiant".equals(type))
             for (Etudiant etudiant : lesEtudiants){
-                if(etudiant.getNumeroEtudiant() == num && nom.equals(etudiant.getNom())){
+                if(etudiant.getNumeroEtudiant() == num ){
                     return true;
                 }
             }
@@ -235,11 +234,13 @@ public class Gala implements Serializable {
         int nombrePlaceOccupees=retrouverNombrePlacesOccupeesEtudiant();
         int nombrePlaceLibre=NB_TABLES_ETU*NB_PLACES_TABLE-nombrePlaceOccupees;
         int nombrePlaceAAjouter=nombrePlaceLibre-lesReservationEnAttente.size();
-        if(!(fileDAttente.isEmpty())){
-            for (int i=0; i<nombrePlaceAAjouter; i++){
-                if (!fileDAttente.isEmpty()){
-                    lesReservationEnAttente.add(fileDAttente.poll());
-                }
+        int nombrePlaceSupplementaire=0;
+        while (!(fileDAttente.isEmpty())){
+            nombrePlaceSupplementaire+=fileDAttente.peek().getNbDePlace();
+            if (nombrePlaceSupplementaire<nombrePlaceAAjouter){
+                lesReservationEnAttente.add(fileDAttente.poll());
+            }else{
+                break;
             }
         }
     }

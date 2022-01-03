@@ -45,10 +45,9 @@ public class Controleur {
         boolean connecte = false;
         while (!connecte) {
             String typeParticipantTemporaire = ihm.identificationType();
-            String nomUtilisateurTemporaire = ihm.identificationNom();
             int numUtilisateurTemporaire = ihm.identificationNum();
 
-            if (gala.checkIdentification(typeParticipantTemporaire, nomUtilisateurTemporaire, numUtilisateurTemporaire)) {
+            if (gala.checkIdentification(typeParticipantTemporaire, numUtilisateurTemporaire)) {
                 utilisateur = gala.getParticipant(typeParticipantTemporaire, numUtilisateurTemporaire);
                 ihm.message("Votre identification est validé");
                connecte=true;
@@ -237,6 +236,8 @@ public class Controleur {
                 ihm.message("Vous pouvez reserver jusqu'à " + nbrPlaceMax + " place(s)");
                 int nombreDePlace = ihm.nbrPlace(nbrPlaceMax);
                 ctlReservationEtudiant(nombreDePlace);
+                ihm.message("Votre demende de reservation à bien été prise en compte");
+                ctlQuitter();
             }else{
                 if(gala.contientReservationEnAttente(reservation)){
                     while (true){
